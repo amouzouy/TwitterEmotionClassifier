@@ -1,10 +1,16 @@
 #!/bin/bash
-jarPath="./emotionclassifier/build/libs"
-trainPath="./emotionclassifier/dataset/training"
-testPath="./emotionclassifier/dataset/testing"
-LibSVMPath="./emotionclassifier/LibSVM"
-modelPath="./emotionclassifier/dataset/models"
-outputPath="./emotionclassifier/dataset/outputs"
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+        path="/home/sheryan/IdeaProjects/emotionclassifier"
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+        path="C:\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier"
+fi
+jarPath="$path/build/libs"
+trainPath="$path/dataset/training"
+testPath="$path/dataset/testing"
+LibSVMPath="$path/LibSVM"
+modelPath="$path/dataset/models"
+outputPath="$path/dataset/outputs"
 IFS=","
 gradle jar
 while read f1 f2 f3 f4
