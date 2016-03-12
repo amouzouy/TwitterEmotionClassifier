@@ -1,2 +1,2 @@
 Description,SVM flags,Preprocessing flags,CV folds
-First Test,-t 0,no flags yet,5
+Testing Lemmatization,-t 0,-ub 20 -l,5

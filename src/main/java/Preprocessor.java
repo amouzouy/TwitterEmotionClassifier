@@ -19,7 +19,7 @@ public class Preprocessor {
         Map<String,FeatureClassDist> featureClassDistMap = new HashMap<>();
         List<String> docIds = new ArrayList<>();
 
-        boolean ub=false,bb=false,up=false,bp=false,pos=false,ir=false;
+        boolean ub=false,bb=false,up=false,bp=false,pos=false,ir=false,lemmaT=false;
         int uFreqCutoff = 0, bFreqCutoff = 0;
 
         String labelsPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/labels.txt";
@@ -33,7 +33,6 @@ public class Preprocessor {
         numFolds = Integer.parseInt(args[0]);
         String param;
         StanfordLemmatizer stanfordLemmatizer = new StanfordLemmatizer();
-//        Stemmer stemmer = new Stemmer();
         long startTime = System.currentTimeMillis();
 
         for(int i=1;i<args.length;i=i+2){
@@ -59,9 +58,6 @@ public class Preprocessor {
                 case "pt":
 
                     break;
-                case "s":
-
-                    break;
                 case "ir":
                     ir = true;
                     FeatureClassDist.percentDiff = Double.parseDouble(args[i+1]);
@@ -69,10 +65,12 @@ public class Preprocessor {
                 case "dt":
 
                     break;
+                case "l":
+                    lemmaT = true;
+                    i--;
+                    break;
             }
         }
-
-        System.out.println(ub+" "+bb);
 
         /*
         * -ub n (add unigrams, with cutoff of n)
@@ -84,6 +82,7 @@ public class Preprocessor {
         * -s stemming?
         * -ir n (irrelevance cutoff for ub,bb)
         * -d dependency tree features
+        * -l use lemmatization for n-grams
         * */
 
         Scanner scannerIn;
@@ -111,15 +110,9 @@ public class Preprocessor {
                     for (CoreLabel cLabel; ptbt.hasNext(); ) {
                         cLabel = (CoreLabel) ptbt.next();
                         stringLabel = cLabel.toString();
-
-                        lemmaStr = stanfordLemmatizer.lemmatize(stringLabel).get(0);
-                        if(lemmaMap.containsKey(lemmaStr)){
-                            lemmaMap.put(lemmaStr, lemmaMap.get(lemmaStr)+1);
+                        if(lemmaT) {
+                            stringLabel = stanfordLemmatizer.lemmatize(stringLabel).get(0);
                         }
-                        else{
-                            lemmaMap.put(lemmaStr, 1);
-                        }
-
                         if (unigramMap.containsKey(stringLabel)) {
                             unigramMap.put(stringLabel, unigramMap.get(stringLabel) + 1);
                         } else {
@@ -144,15 +137,9 @@ public class Preprocessor {
                             if ((iter == (sentence.size() - 1)) && sentence.size() == 1) {
                                 bigramS = sentence.get(0) + " <s>";
                             }
-
-                            lemmaStr = String.join(" ",stanfordLemmatizer.lemmatize(bigramS));
-                            if(lemmaMap.containsKey(lemmaStr)){
-                                lemmaMap.put(lemmaStr, lemmaMap.get(lemmaStr)+1);
+                            if(lemmaT) {
+                                bigramS = String.join(" ", stanfordLemmatizer.lemmatize(bigramS));
                             }
-                            else{
-                                lemmaMap.put(lemmaStr, 1);
-                            }
-
                             if (bigramMap.containsKey(bigramS)) {
                                 bigramMap.put(bigramS, bigramMap.get(bigramS) + 1);
                             } else {
@@ -176,7 +163,8 @@ public class Preprocessor {
                 bigramMap.values().removeIf(val -> val < finalBFreqCutoff);
                 featureVector.putAll(bigramMap);
             }
-            lemmaMap.values().removeIf(val -> val < 20);
+
+            //if time permits
             if(ir) {
                 int removedFeatures = 0;
                 for (Iterator<Map.Entry<String, Integer>> it = featureVector.entrySet().iterator(); it.hasNext(); ) {
@@ -195,75 +183,80 @@ public class Preprocessor {
             PrintWriter writer2 = new PrintWriter("/home/sheryan/IdeaProjects/emotionclassifier/dataset/testing/file"+num+".test", "UTF-8");
 
             int trainingDocs = 0, testingDocs = 0;
-//            for (String docId : docIds) {
-//                counter++;
-//                setAllValuesToZero((HashMap<String, Integer>) featureVector);
-//                if(ub) {
-//                    ptbt = new PTBTokenizer(new FileReader(sentencesPath + "/" + docId + ".txt"), new CoreLabelTokenFactory(), "");
-//                    for (CoreLabel cLabel; ptbt.hasNext(); ) {
-//                        cLabel = (CoreLabel) ptbt.next();
-//                        stringLabel = cLabel.toString();
-//                        if (featureVector.containsKey(stringLabel)) {
-//                            featureVector.put(stringLabel, 1);
-//                        }
-//                    }
-//                }
-//                if(bb) {
-//                    dp = new DocumentPreprocessor(sentencesPath + "/" + docId + ".txt");
-//                    for (List sentence : dp) {
-//                        for (int iter = 0; iter < sentence.size(); iter++) {
-//                            if (iter == 0) {
-//                                bigramS = "<s> " + sentence.get(0);
-//                            }
-//                            if (iter > 0 && iter < (sentence.size() - 1)) {
-//                                bigramS = sentence.get(iter - 1) + " " + sentence.get(iter);
-//                            }
-//                            if ((iter == (sentence.size() - 1)) && sentence.size() > 1) {
-//                                bigramS = sentence.get(sentence.size() - 2) + " <s>";
-//                            }
-//                            if ((iter == (sentence.size() - 1)) && sentence.size() == 1) {
-//                                bigramS = sentence.get(0) + " <s>";
-//                            }
-//                            if (featureVector.containsKey(bigramS)) {
-//                                featureVector.put(bigramS, 1);
-//                            }
-//                        }
-//                    }
-//                }
-//                label = labelMap.get(docId);
-//                int featureCounter;
-//                if ((counter>=(num*3400)) &&  (counter<((num+1)*3400))){
-//                    testingDocs++;
-//                    writer2.print((int) emotionToDouble(label));
-//                    featureCounter = 1;
-//                    for (Iterator<Map.Entry<String, Integer>> it = featureVector.entrySet().iterator(); it.hasNext(); ) {
-//                        Map.Entry<String, Integer> entry = it.next();
-//                        writer2.print(" " + featureCounter + ":" + entry.getValue());
-//                        featureCounter++;
-//                    }
-//                    writer2.println();
-//                }
-//                else {
-//                    trainingDocs++;
-//                    writer1.print((int) emotionToDouble(label));
-//                    featureCounter = 1;
-//                    for (Iterator<Map.Entry<String, Integer>> it = featureVector.entrySet().iterator(); it.hasNext(); ) {
-//                        Map.Entry<String, Integer> entry = it.next();
-//                        writer1.print(" " + featureCounter + ":" + entry.getValue());
-//                        featureCounter++;
-//                    }
-//                    writer1.println();
-//                }
-//            }
+            for (String docId : docIds) {
+                counter++;
+                setAllValuesToZero((HashMap<String, Integer>) featureVector);
+                if(ub) {
+                    ptbt = new PTBTokenizer(new FileReader(sentencesPath + "/" + docId + ".txt"), new CoreLabelTokenFactory(), "");
+                    for (CoreLabel cLabel; ptbt.hasNext(); ) {
+                        cLabel = (CoreLabel) ptbt.next();
+                        stringLabel = cLabel.toString();
+                        if(lemmaT) {
+                            stringLabel = stanfordLemmatizer.lemmatize(stringLabel).get(0);
+                        }
+                        if (featureVector.containsKey(stringLabel)) {
+                            featureVector.put(stringLabel, 1);
+                        }
+                    }
+                }
+                if(bb) {
+                    dp = new DocumentPreprocessor(sentencesPath + "/" + docId + ".txt");
+                    for (List sentence : dp) {
+                        for (int iter = 0; iter < sentence.size(); iter++) {
+                            if (iter == 0) {
+                                bigramS = "<s> " + sentence.get(0);
+                            }
+                            if (iter > 0 && iter < (sentence.size() - 1)) {
+                                bigramS = sentence.get(iter - 1) + " " + sentence.get(iter);
+                            }
+                            if ((iter == (sentence.size() - 1)) && sentence.size() > 1) {
+                                bigramS = sentence.get(sentence.size() - 2) + " <s>";
+                            }
+                            if ((iter == (sentence.size() - 1)) && sentence.size() == 1) {
+                                bigramS = sentence.get(0) + " <s>";
+                            }
+                            if(lemmaT) {
+                                bigramS = String.join(" ", stanfordLemmatizer.lemmatize(bigramS));
+                            }
+                            if (featureVector.containsKey(bigramS)) {
+                                featureVector.put(bigramS, 1);
+                            }
+                        }
+                    }
+                }
+                label = labelMap.get(docId);
+                int featureCounter;
+                if ((counter>=(num*3400)) &&  (counter<((num+1)*3400))){
+                    testingDocs++;
+                    writer2.print((int) emotionToDouble(label));
+                    featureCounter = 1;
+                    for (Iterator<Map.Entry<String, Integer>> it = featureVector.entrySet().iterator(); it.hasNext(); ) {
+                        Map.Entry<String, Integer> entry = it.next();
+                        writer2.print(" " + featureCounter + ":" + entry.getValue());
+                        featureCounter++;
+                    }
+                    writer2.println();
+                }
+                else {
+                    trainingDocs++;
+                    writer1.print((int) emotionToDouble(label));
+                    featureCounter = 1;
+                    for (Iterator<Map.Entry<String, Integer>> it = featureVector.entrySet().iterator(); it.hasNext(); ) {
+                        Map.Entry<String, Integer> entry = it.next();
+                        writer1.print(" " + featureCounter + ":" + entry.getValue());
+                        featureCounter++;
+                    }
+                    writer1.println();
+                }
+            }
             writer1.close();
             writer2.close();
             scannerIn.close();
         }
         long endTime   = System.currentTimeMillis();
-        System.out.println((endTime-startTime)/1000.000+" seconds");
 
-
-        System.out.println("Feature vector size: "+featureVector.size()+" Lemma vector size: "+lemmaMap.size());
+//        System.out.println((endTime-startTime)/1000.000+" seconds");
+//        System.out.println("Feature vector size: "+featureVector.size()+" Lemma vector size: "+lemmaMap.size());
     }
 
     private static double emotionToDouble(String label) {
