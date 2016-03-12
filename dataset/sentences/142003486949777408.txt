@@ -1,0 +1,1 @@
+	The sum of the cubes is the square of the sum!   	

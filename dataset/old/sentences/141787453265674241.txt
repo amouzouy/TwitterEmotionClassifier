@@ -1,0 +1,1 @@
+	Did some experiments with RGBa colours in various browsers. I set alpha to 0.8 and the browser returned the value ~0.798765  	

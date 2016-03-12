@@ -1,0 +1,1 @@
+	Every time we update ADT and the @AndroidDev tools or SDK it costs me like a day of frustration and work stoppage. #Eclipse #Upgrades!	

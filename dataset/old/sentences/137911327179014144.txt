@@ -1,0 +1,1 @@
+	Confirmed.  fails to load texture properly on a Macbook Air with Intel GPU. Runs fine on AMD Radeon Desktop. 	

@@ -1,0 +1,1 @@
+	Python friend is explaining to me how he wrote his own CMS. I cannot seem to convince him to dump his crappy host and learn Django. 	

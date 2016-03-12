@@ -1,0 +1,1 @@
+	When knocks on d #door send #faith 2 open &amp; U will discover no one is there.	

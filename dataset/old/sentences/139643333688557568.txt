@@ -1,0 +1,1 @@
+	One .isXXX() method used to return a bool. Now it returns void and has three bool output parameters. #killmenow	

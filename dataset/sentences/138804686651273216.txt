@@ -1,0 +1,1 @@
+	Started playing with Janrain's API today to find out if it would be a viable (stable!) component to build a SSO system. #saas	

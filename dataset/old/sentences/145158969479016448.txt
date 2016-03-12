@@ -1,0 +1,1 @@
+	Knodding my head to Salif Keita this morning; and overriding ckeditor's flash plugin. It' stripping % from width/height attributes. 	
