@@ -21,9 +21,19 @@ public class Preprocessor {
 
         boolean ub=false,bb=false,up=false,bp=false,pos=false,ir=false,lemmaT=false;
         int uFreqCutoff = 0, bFreqCutoff = 0;
+        String labelsPath="", sentencesPath="";
 
-        String labelsPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/labels.txt";
-        String sentencesPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/sentences";
+        switch(System.getProperty("os.name")){
+            case "Windows 10":
+                labelsPath = "C:\\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/emotionclassifier/dataset/labels.txt";
+                sentencesPath = "C:\\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/emotionclassifier/dataset/sentences";
+                break;
+            case "Linux":
+                labelsPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/labels.txt";
+                sentencesPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/sentences";
+                break;
+        }
+
         String idLabel, id, label;
         PTBTokenizer ptbt;
         DocumentPreprocessor dp;
