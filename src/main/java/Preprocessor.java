@@ -25,8 +25,8 @@ public class Preprocessor {
 
         switch(System.getProperty("os.name")){
             case "Windows 10":
-                labelsPath = "C:\\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/emotionclassifier/dataset/labels.txt";
-                sentencesPath = "C:\\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/emotionclassifier/dataset/sentences";
+                labelsPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/labels.txt";
+                sentencesPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/sentences";
                 break;
             case "Linux":
                 labelsPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/labels.txt";
@@ -188,9 +188,17 @@ public class Preprocessor {
             }
 
             counter = 0;
-
-            PrintWriter writer1 = new PrintWriter("/home/sheryan/IdeaProjects/emotionclassifier/dataset/training/file"+num+".train", "UTF-8");
-            PrintWriter writer2 = new PrintWriter("/home/sheryan/IdeaProjects/emotionclassifier/dataset/testing/file"+num+".test", "UTF-8");
+            PrintWriter writer1 = null, writer2 = null;
+            switch(System.getProperty("os.name")){
+                case "Windows 10":
+                    writer1 = new PrintWriter("C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/training/file"+num+".train", "UTF-8");
+                    writer2 = new PrintWriter("C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/testing/file"+num+".test", "UTF-8");
+                    break;
+                case "Linux":
+                    writer1 = new PrintWriter("/home/sheryan/IdeaProjects/emotionclassifier/dataset/training/file"+num+".train", "UTF-8");
+                    writer2 = new PrintWriter("/home/sheryan/IdeaProjects/emotionclassifier/dataset/testing/file"+num+".test", "UTF-8");
+                    break;
+            }
 
             int trainingDocs = 0, testingDocs = 0;
             for (String docId : docIds) {
