@@ -11,7 +11,7 @@ public class ResultsGenerator {
         int [][] matrix = new int[6][6];
         String [] emotions = {"Surprise","Sadness","Joy","Disgust","Fear","Anger"};
         int totalCount = 0;
-        String actualLabelPath,predictedLabelPath;
+        String actualLabelPath = "",predictedLabelPath = "";
         String svmFlags, preprocessingFlags, description = "N/A";
         int numFolds;
         String actualLabel, predictedLabel;
@@ -24,12 +24,27 @@ public class ResultsGenerator {
         if(args.length == 4){
             description = args[3];
         }
-
-        PrintWriter writer = new PrintWriter(new FileWriter("/home/sheryan/IdeaProjects/emotionclassifier/dataset/results.txt", true));
+        PrintWriter writer = null;
+        switch (System.getProperty("os.name")){
+            case "Linux":
+                writer = new PrintWriter(new FileWriter("/home/sheryan/IdeaProjects/emotionclassifier/dataset/results.txt", true));
+                break;
+            case "Windows 10":
+                writer = new PrintWriter(new FileWriter("C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/results.txt"));
+        }
 
         for(int num=0;num<numFolds;num++) {
-            actualLabelPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/testing/file"+num+".test";
-            predictedLabelPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/outputs/file"+num+".output";
+            switch (System.getProperty("os.name")){
+                case "Linux":
+                    actualLabelPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/testing/file"+num+".test";
+                    predictedLabelPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/outputs/file"+num+".output";
+                    break;
+                case "Windows 10":
+                    actualLabelPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/testing/file"+num+".test";
+                    predictedLabelPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/outputs/file"+num+".output";
+                    break;
+            }
+
 
 
             scannerIn1 = new Scanner(new File(actualLabelPath));
