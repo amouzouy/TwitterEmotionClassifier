@@ -1,10 +1,10 @@
 #!/bin/bash
-jarPath="/home/sheryan/IdeaProjects/emotionclassifier/build/libs"
-trainPath="/home/sheryan/IdeaProjects/emotionclassifier/dataset/training"
-testPath="/home/sheryan/IdeaProjects/emotionclassifier/dataset/testing"
-LibSVMPath="/home/sheryan/IdeaProjects/emotionclassifier/LibSVM"
-modelPath="/home/sheryan/IdeaProjects/emotionclassifier/dataset/models"
-outputPath="/home/sheryan/IdeaProjects/emotionclassifier/dataset/outputs"
+jarPath="./emotionclassifier/build/libs"
+trainPath="./emotionclassifier/dataset/training"
+testPath="./emotionclassifier/dataset/testing"
+LibSVMPath="./emotionclassifier/LibSVM"
+modelPath="./emotionclassifier/dataset/models"
+outputPath="./emotionclassifier/dataset/outputs"
 IFS=","
 gradle jar
 while read f1 f2 f3 f4
