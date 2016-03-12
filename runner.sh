@@ -3,7 +3,7 @@
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
         path="/home/sheryan/IdeaProjects/emotionclassifier"
 elif [[ "$OSTYPE" == "cygwin" ]]; then
-        path="/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier"
+        path="C:\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier"
 fi
 jarPath="$path/build/libs"
 trainPath="$path/dataset/training"
