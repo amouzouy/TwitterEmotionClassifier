@@ -1,14 +1,23 @@
+import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.process.PTBTokenizer;
+import edu.stanford.nlp.semgraph.SemanticGraph;
+import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
+import edu.stanford.nlp.trees.Tree;
+import edu.stanford.nlp.trees.TreeCoreAnnotations;
+import edu.stanford.nlp.util.CoreMap;
+import edu.stanford.nlp.util.TypesafeMap;
 
 import java.io.*;
 import java.util.*;
 
 public class Preprocessor {
 
-    public static void main(String [] args) throws FileNotFoundException, UnsupportedEncodingException {
+    public static void main(String [] args) throws IOException {
 
 
         Map<String,String> labelMap = new HashMap<>();
@@ -19,7 +28,7 @@ public class Preprocessor {
         Map<String,FeatureClassDist> featureClassDistMap = new HashMap<>();
         List<String> docIds = new ArrayList<>();
 
-        boolean ub=false,bb=false,up=false,bp=false,pos=false,ir=false,lemmaT=false;
+        boolean ub=false,bb=false,up=false,bp=false,posB=false,ir=false,lemmaT=false;
         int uFreqCutoff = 0, bFreqCutoff = 0;
         String labelsPath="", sentencesPath="";
 
@@ -97,8 +106,16 @@ public class Preprocessor {
 
         Scanner scannerIn;
         String lemmaStr;
+        int iterS=0;
+        String lastWord="";
+
         //loop over folds, for each fold, skip the 20% test data when creating feature vector,
         //when feature vector is created, loop over test data and populate
+
+        Properties props = new Properties();
+        props.put("annotators", "tokenize, ssplit");
+        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+        String line;
         for(int num=0;num<numFolds;num++) {
 
             labelMap.clear(); unigramMap.clear();bigramMap.clear();featureVector.clear();featureClassDistMap.clear();docIds.clear();
@@ -115,21 +132,26 @@ public class Preprocessor {
                     counter++;
                     continue;
                 }
-                if(ub) {
-                    ptbt = new PTBTokenizer(new FileReader(sentencesPath + "/" + id + ".txt"), new CoreLabelTokenFactory(), "");
-                    for (CoreLabel cLabel; ptbt.hasNext(); ) {
-                        cLabel = (CoreLabel) ptbt.next();
-                        stringLabel = cLabel.toString();
-                        if(lemmaT) {
-                            stringLabel = stanfordLemmatizer.lemmatize(stringLabel).get(0);
+                BufferedReader reader = new BufferedReader(new FileReader(sentencesPath + "/" + id + ".txt"));
+                line = reader.readLine();
+                Annotation document = new Annotation(line);
+                pipeline.annotate(document);
+                List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
+                for(CoreMap sentence: sentences) {
+                    for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+                        String word = token.get(CoreAnnotations.TextAnnotation.class);
+//                      String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+//                      String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
+                        if(ub) {
+                            if (unigramMap.containsKey(word)) {
+                                unigramMap.put(word, unigramMap.get(word) + 1);
+                            } else {
+                                unigramMap.put(word, 1);
+                            }
                         }
-                        if (unigramMap.containsKey(stringLabel)) {
-                            unigramMap.put(stringLabel, unigramMap.get(stringLabel) + 1);
-                        } else {
-                            unigramMap.put(stringLabel, 1);
-                        }
-                        updateFeatureClassDistMap(featureClassDistMap, stringLabel, label);
                     }
+//                  Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+//                  SemanticGraph dependencies = sentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
                 }
                 if(bb) {
                     dp = new DocumentPreprocessor(sentencesPath + "/" + id + ".txt");
@@ -137,25 +159,16 @@ public class Preprocessor {
                         for (int iter = 0; iter < sentence.size(); iter++) {
                             if (iter == 0) {
                                 bigramS = "<s> " + sentence.get(0);
+                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
                             }
-                            if (iter > 0 && iter < (sentence.size() - 1)) {
+                            if (iter > 0) {
                                 bigramS = sentence.get(iter - 1) + " " + sentence.get(iter);
+                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
                             }
-                            if ((iter == (sentence.size() - 1)) && sentence.size() > 1) {
-                                bigramS = sentence.get(sentence.size() - 2) + " <s>";
+                            if ((iter == (sentence.size() - 1))) {
+                                bigramS = sentence.get(iter) + " <s>";
+                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
                             }
-                            if ((iter == (sentence.size() - 1)) && sentence.size() == 1) {
-                                bigramS = sentence.get(0) + " <s>";
-                            }
-                            if(lemmaT) {
-                                bigramS = String.join(" ", stanfordLemmatizer.lemmatize(bigramS));
-                            }
-                            if (bigramMap.containsKey(bigramS)) {
-                                bigramMap.put(bigramS, bigramMap.get(bigramS) + 1);
-                            } else {
-                                bigramMap.put(bigramS, 1);
-                            }
-                            updateFeatureClassDistMap(featureClassDistMap, bigramS, label);
                         }
                     }
                 }
@@ -204,18 +217,25 @@ public class Preprocessor {
             for (String docId : docIds) {
                 counter++;
                 setAllValuesToZero((HashMap<String, Integer>) featureVector);
-                if(ub) {
-                    ptbt = new PTBTokenizer(new FileReader(sentencesPath + "/" + docId + ".txt"), new CoreLabelTokenFactory(), "");
-                    for (CoreLabel cLabel; ptbt.hasNext(); ) {
-                        cLabel = (CoreLabel) ptbt.next();
-                        stringLabel = cLabel.toString();
-                        if(lemmaT) {
-                            stringLabel = stanfordLemmatizer.lemmatize(stringLabel).get(0);
-                        }
-                        if (featureVector.containsKey(stringLabel)) {
-                            featureVector.put(stringLabel, 1);
+
+                BufferedReader reader = new BufferedReader(new FileReader(sentencesPath + "/" + docId + ".txt"));
+                line = reader.readLine();
+                Annotation document = new Annotation(line);
+                pipeline.annotate(document);
+                List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
+                for(CoreMap sentence: sentences) {
+                    for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+                        String word = token.get(CoreAnnotations.TextAnnotation.class);
+//                      String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+//                      String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
+                        if(ub) {
+                            if (featureVector.containsKey(word)) {
+                                featureVector.put(word, 1);
+                            }
                         }
                     }
+//                  Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+//                  SemanticGraph dependencies = sentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
                 }
                 if(bb) {
                     dp = new DocumentPreprocessor(sentencesPath + "/" + docId + ".txt");
@@ -223,21 +243,15 @@ public class Preprocessor {
                         for (int iter = 0; iter < sentence.size(); iter++) {
                             if (iter == 0) {
                                 bigramS = "<s> " + sentence.get(0);
+                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
                             }
-                            if (iter > 0 && iter < (sentence.size() - 1)) {
+                            if (iter > 0) {
                                 bigramS = sentence.get(iter - 1) + " " + sentence.get(iter);
+                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
                             }
-                            if ((iter == (sentence.size() - 1)) && sentence.size() > 1) {
-                                bigramS = sentence.get(sentence.size() - 2) + " <s>";
-                            }
-                            if ((iter == (sentence.size() - 1)) && sentence.size() == 1) {
-                                bigramS = sentence.get(0) + " <s>";
-                            }
-                            if(lemmaT) {
-                                bigramS = String.join(" ", stanfordLemmatizer.lemmatize(bigramS));
-                            }
-                            if (featureVector.containsKey(bigramS)) {
-                                featureVector.put(bigramS, 1);
+                            if ((iter == (sentence.size() - 1))) {
+                                bigramS = sentence.get(iter) + " <s>";
+                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
                             }
                         }
                     }
@@ -273,8 +287,7 @@ public class Preprocessor {
         }
         long endTime   = System.currentTimeMillis();
 
-//        System.out.println((endTime-startTime)/1000.000+" seconds");
-//        System.out.println("Feature vector size: "+featureVector.size()+" Lemma vector size: "+lemmaMap.size());
+        System.out.println((endTime-startTime)/1000.000+" seconds");
     }
 
     private static double emotionToDouble(String label) {
@@ -313,5 +326,27 @@ public class Preprocessor {
         else{
             featureClassDistMap.put(ngram,new FeatureClassDist(label));
         }
+    }
+
+    private static void bigramTestAdder(boolean lemmaT, String bigramS, Map featureVector,StanfordLemmatizer stanfordLemmatizer){
+        if(lemmaT) {
+            bigramS = String.join(" ", stanfordLemmatizer.lemmatize(bigramS));
+        }
+        if (featureVector.containsKey(bigramS)) {
+            featureVector.put(bigramS, 1);
+        }
+    }
+
+    private static void bigramTrainAdder(boolean lemmaT, String bigramS, Map<String,Integer> bigramMap,
+                                         StanfordLemmatizer stanfordLemmatizer, Map featureClassDistMap, String label){
+        if(lemmaT) {
+            bigramS = String.join(" ", stanfordLemmatizer.lemmatize(bigramS));
+        }
+        if (bigramMap.containsKey(bigramS)) {
+            bigramMap.put(bigramS, bigramMap.get(bigramS) + 1);
+        } else {
+            bigramMap.put(bigramS, 1);
+        }
+        updateFeatureClassDistMap(featureClassDistMap, bigramS, label);
     }
 }
