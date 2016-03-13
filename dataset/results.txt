@@ -52,6 +52,7 @@ CV folds: 5
 
 
 
+<<<<<<< Updated upstream
 Results for date: 2016/03/13 00:17:39
 Description: Testing Lemmatization Unigram count <10
 SVM flags: -t 0
@@ -103,3 +104,76 @@ CV folds: 5
      Anger       132       239       308        57       109       391       0.316     0.440     0.368
 
  Total Accuracy: 0.5599152891346549
+
+
+
+
+Results for date: 2016/03/12 23:11:28
+Description: Testing Bigram
+SVM flags: -t 0
+Preprocessing flags: -bb 50
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise       346       209      2529         0        27         2       0.111     0.341     0.168
+   Sadness       221       684      2157         0        31         7       0.221     0.400     0.284
+       Joy       242       356      6010         0        64         3       0.900     0.441     0.592
+   Disgust        39        87       469         0         7         1       0.000     0.000       NaN
+      Fear       101       180      1550         1       436         4       0.192     0.725     0.304
+     Anger        67       194       919         1        36        19       0.015     0.528     0.030
+
+ Total Accuracy: 0.440908288722866
+
+
+
+Results for date: 2016/03/12 23:46:07
+Description: Testing Bigram Lemmatization
+SVM flags: -t 0
+Preprocessing flags: -bb 50 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise       452       217      2391         3        40        10       0.145     0.379     0.210
+   Sadness       202       782      2023         4        63        26       0.252     0.408     0.312
+       Joy       306       381      5888         1        86        13       0.882     0.451     0.597
+   Disgust        52        93       434         3        16         5       0.005     0.200     0.010
+      Fear       103       228      1463         2       471         5       0.207     0.656     0.315
+     Anger        77       217       860         2        42        38       0.031     0.392     0.057
+
+ Total Accuracy: 0.4490852403082534
+
+
+
+Results for date: 2016/03/13 00:53:57
+Description: Testing Bigram
+SVM flags: -t 0
+Preprocessing flags: -bb 20
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise       739       274      1959        16        79        46       0.237     0.379     0.292
+   Sadness       365       908      1612        32       107        76       0.293     0.414     0.343
+       Joy       465       452      5479        27       176        76       0.821     0.491     0.615
+   Disgust        67       116       344        14        39        23       0.023     0.099     0.038
+      Fear       171       237      1076        26       696        66       0.306     0.594     0.404
+     Anger       145       204       679        27        75       106       0.086     0.270     0.130
+
+ Total Accuracy: 0.4672039531737161
+
+
+
+Results for date: 2016/03/13 03:18:48
+Description: Testing Bigram Lemmatization
+SVM flags: -t 0
+Preprocessing flags: -bb 20 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise       935       283      1710        37       100        48       0.300     0.395     0.341
+   Sadness       382      1046      1403        37       137        95       0.337     0.422     0.375
+       Joy       586       539      5235        37       187        91       0.784     0.515     0.622
+   Disgust        88       109       291        41        40        34       0.068     0.201     0.102
+      Fear       218       257       945        25       756        71       0.333     0.585     0.424
+     Anger       160       245       581        27        73       150       0.121     0.307     0.174
+
+ Total Accuracy: 0.4802047179245838
