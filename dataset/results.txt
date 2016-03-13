@@ -51,8 +51,6 @@ CV folds: 5
  Total Accuracy: 0.5579151714806754
 
 
-
-<<<<<<< Updated upstream
 Results for date: 2016/03/13 00:17:39
 Description: Testing Lemmatization Unigram count <10
 SVM flags: -t 0
