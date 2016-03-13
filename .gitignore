@@ -2,6 +2,7 @@
 build/
 classes/
 gradle.properties
+conf.csv
 
 *.orig
 

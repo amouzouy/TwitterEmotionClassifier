@@ -31,3 +31,21 @@ CV folds: 5
      Anger       139       245       373        54        97       328       0.265     0.408     0.322
 
  Total Accuracy: 0.5577386905112065
+
+
+
+Results for date: 2016/03/12 19:46:47
+Description: Testing Unigrams count >10
+SVM flags: -t 0
+Preprocessing flags: -ub 10
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1557       332       936        48       155        85       0.500     0.509     0.505
+   Sadness       372      1496       854        80       166       132       0.483     0.480     0.481
+       Joy       659       609      4944        74       262       127       0.741     0.637     0.685
+   Disgust        89       135       148       121        62        48       0.201     0.269     0.230
+      Fear       228       297       533        64      1047       103       0.461     0.583     0.515
+     Anger       153       245       351        63       105       319       0.258     0.392     0.311
+
+ Total Accuracy: 0.5579151714806754

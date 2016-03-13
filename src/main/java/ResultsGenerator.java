@@ -30,7 +30,7 @@ public class ResultsGenerator {
                 writer = new PrintWriter(new FileWriter("/home/sheryan/IdeaProjects/emotionclassifier/dataset/results.txt", true));
                 break;
             case "Windows 10":
-                writer = new PrintWriter(new FileWriter("C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/results.txt"));
+                writer = new PrintWriter(new FileWriter("C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/results.txt",true));
         }
 
         for(int num=0;num<numFolds;num++) {

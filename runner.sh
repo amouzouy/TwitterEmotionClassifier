@@ -2,8 +2,10 @@
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
         path="/home/sheryan/IdeaProjects/emotionclassifier"
+		ext=""
 elif [[ "$OSTYPE" == "cygwin" ]]; then
         path="C:\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier"
+		ext=".exe"
 fi
 jarPath="$path/build/libs"
 trainPath="$path/dataset/training"
@@ -24,10 +26,17 @@ do
         END=$(expr ${f4} - 1)
         for ((i=0;i<=END;i++));
                 do
-                        ${LibSVMPath}/svm-train ${svmParams[@]} ${trainPath}/file$i.train
+                        ${LibSVMPath}/svm-train$ext ${svmParams[@]} ${trainPath}/file$i.train
                         mv ./file${i}.train.model ${modelPath}
-                        ${LibSVMPath}/svm-predict ${testPath}/file$i.test ${modelPath}/file$i.train.model ${outputPath}/file$i.output
+                        ${LibSVMPath}/svm-predict$ext ${testPath}/file$i.test ${modelPath}/file$i.train.model ${outputPath}/file$i.output
                 done
                 java -cp ${jarPath}/emotionclassifier-1.0-SNAPSHOT.jar ResultsGenerator $f4 "$f2" "$f3" "$f1"
-                rm ${testPath}/*.test ${outputPath}/*.output ${trainPath}/*.train ${modelPath}/*.model
+				if [[ "$OSTYPE" == "linux-gnu" ]]; then
+						rm ${testPath}/*.test ${outputPath}/*.output ${trainPath}/*.train ${modelPath}/*.model
+				elif [[ "$OSTYPE" == "cygwin" ]]; then
+						rm "C:\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/models"/*.model
+						rm "C:\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/training"/*.train
+						rm "C:\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/testing"/*.test
+						rm "C:\cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/outputs"/*.output
+				fi
 done < conf.csv
