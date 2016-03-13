@@ -1,3 +1,4 @@
+import edu.stanford.nlp.ling.CoreAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
@@ -122,6 +123,7 @@ public class Preprocessor {
             scannerIn = new Scanner(new File(labelsPath));
 
             int counter=0;
+            String word;
             while (scannerIn.hasNext()) {
                 idLabel = scannerIn.nextLine();
                 id = idLabel.substring(0, 18);
@@ -139,7 +141,12 @@ public class Preprocessor {
                 List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
                 for(CoreMap sentence: sentences) {
                     for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-                        String word = token.get(CoreAnnotations.TextAnnotation.class);
+                        if(lemmaT){
+                            word = token.get(CoreAnnotations.LemmaAnnotation.class);
+                        }
+                        else{
+                            word = token.get(CoreAnnotations.TextAnnotation.class);
+                        }
 //                      String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
 //                      String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
                         if(ub) {
@@ -225,7 +232,12 @@ public class Preprocessor {
                 List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
                 for(CoreMap sentence: sentences) {
                     for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-                        String word = token.get(CoreAnnotations.TextAnnotation.class);
+                        if(lemmaT) {
+                            word = token.getString(CoreAnnotations.LemmaAnnotation.class);
+                        }
+                        else{
+                            word = token.get(CoreAnnotations.TextAnnotation.class);
+                        }
 //                      String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
 //                      String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
                         if(ub) {
