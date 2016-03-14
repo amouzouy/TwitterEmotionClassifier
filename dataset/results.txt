@@ -229,4 +229,22 @@ CV folds: 5
      Anger       156       227       348        64       106       335       0.271     0.383     0.317
 
  Total Accuracy: 0.5550326489793517
- 
+
+
+
+
+Results for date: 2016/03/14 19:02:20
+Description: Testing Lemmatization
+SVM flags: -t 0
+Preprocessing flags: -ub 10 -bb 50 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1587       337       861        49       156       123       0.510     0.498     0.504
+   Sadness       382      1487       828        76       175       152       0.480     0.479     0.479
+       Joy       727       653      4795        75       261       164       0.718     0.644     0.679
+   Disgust        93       116       135       147        54        58       0.244     0.330     0.280
+      Fear       243       286       488        56      1098       101       0.483     0.595     0.533
+     Anger       152       224       340        43       102       375       0.303     0.385     0.340
+
+ Total Accuracy: 0.5582093064297899
