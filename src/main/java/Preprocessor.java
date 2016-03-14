@@ -141,13 +141,11 @@ public class Preprocessor {
                 List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
                 for(CoreMap sentence: sentences) {
                     for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+                        word = token.get(CoreAnnotations.TextAnnotation.class);
                         if(lemmaT){
-                            word = token.get(CoreAnnotations.LemmaAnnotation.class);
+                            word = stanfordLemmatizer.lemmatize(word).get(0);
                         }
-                        else{
-                            word = token.get(CoreAnnotations.TextAnnotation.class);
-                        }
-//                      String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+//                        String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
 //                      String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
                         if(ub) {
                             if (unigramMap.containsKey(word)) {
@@ -182,7 +180,6 @@ public class Preprocessor {
                 counter++;
             }
 
-            //remove all entries in n-gram maps which have count less then n
             if(ub) {
                 final int finalUFreqCutoff = uFreqCutoff;
                 unigramMap.values().removeIf(val -> val < finalUFreqCutoff);
@@ -232,11 +229,9 @@ public class Preprocessor {
                 List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
                 for(CoreMap sentence: sentences) {
                     for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-                        if(lemmaT) {
-                            word = token.getString(CoreAnnotations.LemmaAnnotation.class);
-                        }
-                        else{
-                            word = token.get(CoreAnnotations.TextAnnotation.class);
+                        word = token.get(CoreAnnotations.TextAnnotation.class);
+                        if(lemmaT){
+                            word = stanfordLemmatizer.lemmatize(word).get(0);
                         }
 //                      String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
 //                      String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
