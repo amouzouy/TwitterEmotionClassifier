@@ -22,7 +22,7 @@ do
         prepParams=()
         declare -a "svmParams=($f2)"
         declare -a "prepParams=($f3)"
-        java -cp "${jarPath}/emotionclassifier-1.0-SNAPSHOT.jar" Preprocessor $f4 ${prepParams[@]}
+        java -cp "${jarPath}/emotionclassifier-1.0-SNAPSHOT.jar" FeatureExtractor $f4 ${prepParams[@]}
         END=$(expr ${f4} - 1)
         for ((i=0;i<=END;i++));
                 do

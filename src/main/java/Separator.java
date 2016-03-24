@@ -20,7 +20,7 @@ public class Separator {
             extractedSent = nextSent.substring(startS + 1, endS);
             id = nextSent.substring(0, startS);
             label = nextSent.substring(endS+3);
-            sentWriter = new PrintWriter("/home/sheryan/IdeaProjects/emotionclassifier/dataset/sentences/"+id+".txt", "UTF-8");
+            sentWriter = new PrintWriter("/home/sheryan/IdeaProjects/emotionclassifier/dataset/tweets/"+id+".txt", "UTF-8");
             sentWriter.println(extractedSent);
             labelWriter.println(id + " " + label);
             sentWriter.close();
