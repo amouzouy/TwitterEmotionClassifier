@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NN Ah)) (NP (NN job) (NN hunting)) (. .)))","depTree":"[Ah/NN dep>[hunting/NN compound>job/NN] punct>./.]","postags":["NN","NN","NN","."]}],"unigrams":["Ah","job","hunting","."],"bigrams":["<s> Ah","Ah job","job hunting",". <s>"],"lemUnigrams":["ah","job","hunting","."],"lemBigrams":["<s> ah","ah job","job hunting",". <s>"]}

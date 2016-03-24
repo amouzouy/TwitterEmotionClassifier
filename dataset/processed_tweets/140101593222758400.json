@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NNP Home)) (NP (JJ sweet) (NN home))))","depTree":"[Home/NNP dep>[home/NN amod>sweet/JJ]]","postags":["NNP","JJ","NN"]}],"unigrams":["Home","sweet","home"],"bigrams":["<s> Home","Home sweet","home <s>"],"lemUnigrams":["Home","sweet","home"],"lemBigrams":["<s> Home","Home sweet","home <s>"]}

@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NNP Family)) (NP (NN movie) (NN time))))","depTree":"[Family/NNP dep>[time/NN compound>movie/NN]]","postags":["NNP","NN","NN"]}],"unigrams":["Family","movie","time"],"bigrams":["<s> Family","Family movie","time <s>"],"lemUnigrams":["Family","movie","time"],"lemBigrams":["<s> family","Family movie","time <s>"]}

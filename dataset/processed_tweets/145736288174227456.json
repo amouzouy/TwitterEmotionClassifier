@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (JJ Brown) (NN bag)) (NP (JJ special))))","depTree":"[bag/NN amod>Brown/JJ dep>special/JJ]","postags":["JJ","NN","JJ"]}],"unigrams":["Brown","bag","special"],"bigrams":["<s> Brown","Brown bag","special <s>"],"lemUnigrams":["brown","bag","special"],"lemBigrams":["<s> Brown","brown bag","special <s>"]}

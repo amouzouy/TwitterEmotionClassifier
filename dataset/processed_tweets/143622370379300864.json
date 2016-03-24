@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (FRAG (NP (NN Work)) (PP (IN till) (NP (NN noon)))))","depTree":"[Work/NN nmod:till>[noon/NN case>till/IN]]","postags":["NN","IN","NN"]}],"unigrams":["Work","till","noon"],"bigrams":["<s> Work","Work till","noon <s>"],"lemUnigrams":["work","till","noon"],"lemBigrams":["<s> work","work till","noon <s>"]}

@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (JJ black) (NNP friday)) (NP (NN shopping))))","depTree":"[friday/NNP amod>black/JJ dep>shopping/NN]","postags":["JJ","NNP","NN"]}],"unigrams":["black","friday","shopping"],"bigrams":["<s> black","black friday","shopping <s>"],"lemUnigrams":["black","friday","shopping"],"lemBigrams":["<s> black","black friday","shopping <s>"]}

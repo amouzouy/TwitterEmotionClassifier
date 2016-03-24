@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (S (VP (VBG leaving) (NP (NN camp)) (NP-TMP (NN today)))))","depTree":"[leaving/VBG dobj>camp/NN nmod:tmod>today/NN]","postags":["VBG","NN","NN"]}],"unigrams":["leaving","camp","today"],"bigrams":["<s> leaving","leaving camp","today <s>"],"lemUnigrams":["leave","camp","today"],"lemBigrams":["<s> leave","leave camp","today <s>"]}

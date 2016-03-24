@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (FRAG (ADJP (JJ Stupid)) (ADJP (JJ stupid) (JJ stupid))))","depTree":"[Stupid/JJ dep>[stupid/JJ amod>stupid/JJ]]","postags":["JJ","JJ","JJ"]}],"unigrams":["Stupid","stupid","stupid"],"bigrams":["<s> Stupid","Stupid stupid","stupid <s>"],"lemUnigrams":["stupid","stupid","stupid"],"lemBigrams":["<s> stupid","stupid stupid","stupid <s>"]}

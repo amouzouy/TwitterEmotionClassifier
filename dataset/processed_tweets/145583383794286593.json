@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (JJ Nick-o-teen) (NN time) (. .)))","depTree":"[time/NN amod>Nick-o-teen/JJ punct>./.]","postags":["JJ","NN","."]}],"unigrams":["Nick-o-teen","time","."],"bigrams":["<s> Nick-o-teen","Nick-o-teen time",". <s>"],"lemUnigrams":["nick-o-teen","time","."],"lemBigrams":["<s> nick-o-teen","nick-o-teen time",". <s>"]}

@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (FRAG (NP (JJ Stupid) (NN Jew) (NN book))))","depTree":"[book/NN amod>Stupid/JJ compound>Jew/NN]","postags":["JJ","NN","NN"]}],"unigrams":["Stupid","Jew","book"],"bigrams":["<s> Stupid","Stupid Jew","book <s>"],"lemUnigrams":["stupid","jew","book"],"lemBigrams":["<s> stupid","stupid jew","book <s>"]}

@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (FRAG (NP (JJ double) (NN period) (NN science))))","depTree":"[science/NN amod>double/JJ compound>period/NN]","postags":["JJ","NN","NN"]}],"unigrams":["double","period","science"],"bigrams":["<s> double","double period","science <s>"],"lemUnigrams":["double","period","science"],"lemBigrams":["<s> double","double period","science <s>"]}

@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NNP Lake)) (NP (NN effect) (NN snow))))","depTree":"[Lake/NNP dep>[snow/NN compound>effect/NN]]","postags":["NNP","NN","NN"]}],"unigrams":["Lake","effect","snow"],"bigrams":["<s> Lake","Lake effect","snow <s>"],"lemUnigrams":["Lake","effect","snow"],"lemBigrams":["<s> Lake","Lake effect","snow <s>"]}

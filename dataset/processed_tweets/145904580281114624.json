@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (CD 2) (NN hour)) (NP (NN car) (NN ride))))","depTree":"[hour/NN nummod>2/CD dep>[ride/NN compound>car/NN]]","postags":["CD","NN","NN","NN"]}],"unigrams":["2","hour","car","ride"],"bigrams":["<s> 2","2 hour","hour car","ride <s>"],"lemUnigrams":["2","hour","car","ride"],"lemBigrams":["<s> 2","2 hour","hour car","ride <s>"]}

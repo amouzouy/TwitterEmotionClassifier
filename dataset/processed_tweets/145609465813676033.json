@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (FRAG (NP (NP (NNP Egg) (NNP Nog)) (ADVP (RB late)))))","depTree":"[Nog/NNP compound>Egg/NNP advmod>late/RB]","postags":["NNP","NNP","RB"]}],"unigrams":["Egg","Nog","late"],"bigrams":["<s> Egg","Egg Nog","late <s>"],"lemUnigrams":["Egg","Nog","late"],"lemBigrams":["<s> egg","Egg Nog","late <s>"]}

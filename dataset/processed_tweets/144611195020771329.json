@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (S (NP (NN track)) (VP (VBP meet) (NP-TMP (NN tomorrow)))))","depTree":"[meet/VBP nsubj>track/NN nmod:tmod>tomorrow/NN]","postags":["NN","VBP","NN"]}],"unigrams":["track","meet","tomorrow"],"bigrams":["<s> track","track meet","tomorrow <s>"],"lemUnigrams":["track","meet","tomorrow"],"lemBigrams":["<s> track","track meet","tomorrow <s>"]}

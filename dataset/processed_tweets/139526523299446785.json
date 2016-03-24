@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NN Work) (NN work)) (NP (NN work))))","depTree":"[work/NN compound>Work/NN dep>work/NN]","postags":["NN","NN","NN"]}],"unigrams":["Work","work","work"],"bigrams":["<s> Work","Work work","work <s>"],"lemUnigrams":["work","work","work"],"lemBigrams":["<s> work","work work","work <s>"]}

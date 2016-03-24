@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (S (NP (NN Man) (CD I)) (VP (VBP miss) (NP (NN work)))))","depTree":"[miss/VBP nsubj>[Man/NN nummod>I/CD] dobj>work/NN]","postags":["NN","CD","VBP","NN"]}],"unigrams":["Man","I","miss","work"],"bigrams":["<s> Man","Man I","I miss","work <s>"],"lemUnigrams":["man","i","miss","work"],"lemBigrams":["<s> man","man i","I miss","work <s>"]}

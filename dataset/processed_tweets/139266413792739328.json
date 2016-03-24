@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (S (VP (VBG Heading) (ADVP (RB back) (NN home)))))","depTree":"[Heading/VBG advmod>[back/RB dep>home/NN]]","postags":["VBG","RB","NN"]}],"unigrams":["Heading","back","home"],"bigrams":["<s> Heading","Heading back","home <s>"],"lemUnigrams":["head","back","home"],"lemBigrams":["<s> head","head back","home <s>"]}

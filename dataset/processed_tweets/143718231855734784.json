@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NNP Class)) (NP (NN class) (NN class))))","depTree":"[Class/NNP dep>[class/NN compound>class/NN]]","postags":["NNP","NN","NN"]}],"unigrams":["Class","class","class"],"bigrams":["<s> Class","Class class","class <s>"],"lemUnigrams":["Class","class","class"],"lemBigrams":["<s> class","Class class","class <s>"]}

@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (FRAG (NP (JJ Formal) (NN dress) (NN shopping))))","depTree":"[shopping/NN amod>Formal/JJ compound>dress/NN]","postags":["JJ","NN","NN"]}],"unigrams":["Formal","dress","shopping"],"bigrams":["<s> Formal","Formal dress","shopping <s>"],"lemUnigrams":["formal","dress","shopping"],"lemBigrams":["<s> formal","formal dress","shopping <s>"]}

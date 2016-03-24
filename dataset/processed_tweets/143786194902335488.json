@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NNP Woo)) (NP (JJ bad) (NN mood))))","depTree":"[Woo/NNP dep>[mood/NN amod>bad/JJ]]","postags":["NNP","JJ","NN"]}],"unigrams":["Woo","bad","mood"],"bigrams":["<s> Woo","Woo bad","mood <s>"],"lemUnigrams":["Woo","bad","mood"],"lemBigrams":["<s> Woo","Woo bad","mood <s>"]}

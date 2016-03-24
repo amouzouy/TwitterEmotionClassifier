@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (S (NP (VBG Thinking) (NNS moods)) (VP (VBP suck))))","depTree":"[suck/VBP nsubj>[moods/NNS amod>Thinking/VBG]]","postags":["VBG","NNS","VBP"]}],"unigrams":["Thinking","moods","suck"],"bigrams":["<s> Thinking","Thinking moods","suck <s>"],"lemUnigrams":["think","mood","suck"],"lemBigrams":["<s> think","think mood","suck <s>"]}

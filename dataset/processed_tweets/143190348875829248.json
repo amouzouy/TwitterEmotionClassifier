@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NNP Crazy) (NNP STUPID)) (NP (NN love))))","depTree":"[STUPID/NNP compound>Crazy/NNP dep>love/NN]","postags":["NNP","NNP","NN"]}],"unigrams":["Crazy","STUPID","love"],"bigrams":["<s> Crazy","Crazy STUPID","love <s>"],"lemUnigrams":["Crazy","STUPID","love"],"lemBigrams":["<s> Crazy","Crazy STUPID","love <s>"]}

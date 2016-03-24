@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (FRAG (ADVP (RB late)) (NP (NN night) (NN shopping))))","depTree":"[shopping/NN dep>late/RB compound>night/NN]","postags":["RB","NN","NN"]}],"unigrams":["late","night","shopping"],"bigrams":["<s> late","late night","shopping <s>"],"lemUnigrams":["late","night","shopping"],"lemBigrams":["<s> late","late night","shopping <s>"]}

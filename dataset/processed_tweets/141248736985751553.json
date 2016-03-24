@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (FRAG (NP (JJ Long) (NN ass) (NN day))))","depTree":"[day/NN amod>Long/JJ compound>ass/NN]","postags":["JJ","NN","NN"]}],"unigrams":["Long","ass","day"],"bigrams":["<s> Long","Long ass","day <s>"],"lemUnigrams":["long","ass","day"],"lemBigrams":["<s> Long","long ass","day <s>"]}

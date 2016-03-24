@@ -19,6 +19,7 @@ public class FeatureExtractor {
     public static void main(String [] args) throws IOException {
 
 
+        int countImportant=0;
         Map<String,String> labelMap = new HashMap<>();
         Map<String,Integer> unigramMap = new HashMap<>();
         Map<String,Integer> bigramMap = new HashMap<>();
@@ -27,7 +28,7 @@ public class FeatureExtractor {
         Map<String,FeatureClassDist> featureClassDistMap = new HashMap<>();
         List<String> docIds = new ArrayList<>();
 
-        boolean ub=false,bb=false,up=false,bp=false,posB=false,ir=false,lemmaT=false;
+        boolean ub=false,bb=false,up=false,bp=false,posB=false,ir=false,lemmaT=false, pt=false,dt=false;
         int uFreqCutoff = 0, bFreqCutoff = 0;
         String labelsPath="", sentencesPath="";
 
@@ -71,17 +72,17 @@ public class FeatureExtractor {
 
                     break;
                 case "pos":
-
+                    posB=true;
                     break;
                 case "pt":
-
+                    pt=true;
                     break;
                 case "ir":
                     ir = true;
                     FeatureClassDist.percentDiff = Double.parseDouble(args[i+1]);
                     break;
                 case "dt":
-
+                    dt=true;
                     break;
                 case "l":
                     lemmaT = true;
@@ -119,7 +120,6 @@ public class FeatureExtractor {
 
             labelMap.clear(); unigramMap.clear();bigramMap.clear();featureVector.clear();featureClassDistMap.clear();docIds.clear();
             scannerIn = new Scanner(new File(labelsPath));
-            int sentCount=-1;
             int counter=0;
             String word;
             while (scannerIn.hasNext()) {
@@ -132,59 +132,113 @@ public class FeatureExtractor {
                     counter++;
                     continue;
                 }
-                BufferedReader reader = new BufferedReader(new FileReader(sentencesPath + "/" + id + ".txt"));
-                line = reader.readLine();
-                Annotation document = new Annotation(line);
-                pipeline.annotate(document);
-                List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
-                for(CoreMap sentence: sentences) {
-                    for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-                        word = token.get(CoreAnnotations.TextAnnotation.class);
-                        if(lemmaT){
-                            word = stanfordLemmatizer.lemmatize(word).get(0);
-                        }
-//                        String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-//                      String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
-                        if(ub) {
-                            if (unigramMap.containsKey(word)) {
-                                unigramMap.put(word, unigramMap.get(word) + 1);
+
+                TweetInfo tweetInfo = new TweetInfo();
+
+                if(ub){
+                    if(lemmaT){
+                        for(String lug:tweetInfo.getLemUnigrams()){
+                            if (unigramMap.containsKey(lug)) {
+                                unigramMap.put(lug, unigramMap.get(lug) + 1);
                             } else {
-                                unigramMap.put(word, 1);
+                                unigramMap.put(lug, 1);
                             }
                         }
                     }
-//                    Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-//                    tree.indentedListPrint();
-//                    tree.pennPrint();
-//
-//                    SemanticGraph dependencies = sentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
-//                    System.out.println("\n" + dependencies.toCompactString(true));
-//                    System.out.println();
-                }
-                if(bb) {
-                    sentCount = 0;
-                    dp = new DocumentPreprocessor(sentencesPath + "/" + id + ".txt");
-                    for (List sentence : dp) {
-                        sentCount++;
-                        for (int iter = 0; iter < sentence.size(); iter++) {
-                            if (iter == 0) {
-                                bigramS = "<s> " + sentence.get(0);
-                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
-                            }
-                            if (iter > 0) {
-                                bigramS = sentence.get(iter - 1) + " " + sentence.get(iter);
-                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
-                            }
-                            if ((iter == (sentence.size() - 1))) {
-                                bigramS = sentence.get(iter) + " <s>";
-                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
+                    else{
+                        for(String ug:tweetInfo.getUnigrams()){
+                            if (unigramMap.containsKey(ug)) {
+                                unigramMap.put(ug, unigramMap.get(ug) + 1);
+                            } else {
+                                unigramMap.put(ug, 1);
                             }
                         }
                     }
                 }
-                if(sentences.size() != sentCount){
-                    System.out.println("sizes dont match");
+
+                if(bb){
+                    if(lemmaT){
+                        for(String lbg:tweetInfo.getLemBigrams()){
+                            if (bigramMap.containsKey(lbg)) {
+                                bigramMap.put(lbg, bigramMap.get(lbg) + 1);
+                            } else {
+                                bigramMap.put(lbg, 1);
+                            }
+                        }
+                    }
+                    else{
+                        for(String bg:tweetInfo.getBigrams()){
+                            if (bigramMap.containsKey(bg)) {
+                                bigramMap.put(bg, bigramMap.get(bg) + 1);
+                            } else {
+                                bigramMap.put(bg, 1);
+                            }
+                        }
+                    }
                 }
+
+                if(posB){
+
+                }
+
+                if(pt){
+
+                }
+
+                if(dt){
+
+                }
+
+//                BufferedReader reader = new BufferedReader(new FileReader(sentencesPath + "/" + id + ".txt"));
+//                line = reader.readLine();
+//                Annotation document = new Annotation(line);
+//                pipeline.annotate(document);
+//                List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
+//                for(CoreMap sentence: sentences) {
+//                    for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+//                        word = token.get(CoreAnnotations.TextAnnotation.class);
+//                        if(lemmaT){
+//                            word = stanfordLemmatizer.lemmatize(word).get(0);
+//                        }
+////                        String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+////                      String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
+//                        if(ub) {
+//                            if (unigramMap.containsKey(word)) {
+//                                unigramMap.put(word, unigramMap.get(word) + 1);
+//                            } else {
+//                                unigramMap.put(word, 1);
+//                            }
+//                        }
+//                    }
+////                    Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+////                    tree.indentedListPrint();
+////                    tree.pennPrint();
+////
+////                    SemanticGraph dependencies = sentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
+////                    System.out.println("\n" + dependencies.toCompactString(true));
+////                    System.out.println();
+//                }
+//                if(bb) {
+//                    sentCount = 0;
+//                    dp = new DocumentPreprocessor(sentencesPath + "/" + id + ".txt");
+//                    for (List sentence : dp) {
+//                        sentCount++;
+//                        for (int iter = 0; iter < sentence.size(); iter++) {
+//                            if (iter == 0) {
+//                                bigramS = "<s> " + sentence.get(0);
+//                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
+//                            }
+//                            if (iter > 0) {
+//                                bigramS = sentence.get(iter - 1) + " " + sentence.get(iter);
+//                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
+//                            }
+//                            if ((iter == (sentence.size() - 1))) {
+//                                bigramS = sentence.get(iter) + " <s>";
+//                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
+//                            }
+//                        }
+//                    }
+//                }
                 counter++;
             }
 
@@ -229,52 +283,81 @@ public class FeatureExtractor {
             for (String docId : docIds) {
                 counter++;
                 setAllValuesToZero((HashMap<String, Integer>) featureVector);
+                TweetInfo tweetInfo = new TweetInfo();
+                if(ub){
+                    if(lemmaT){
+                        for(String lug:tweetInfo.getLemUnigrams()){
+                            if (featureVector.containsKey(lug)) {
+                                featureVector.put(lug, 1);
+                            }
+                        }
+                    }
+                    else{
+                        for(String ug:tweetInfo.getUnigrams()){
+                            if (featureVector.containsKey(ug)) {
+                                featureVector.put(ug, 1);
+                            }
+                        }
+                    }
+                }
 
-                BufferedReader reader = new BufferedReader(new FileReader(sentencesPath + "/" + docId + ".txt"));
-                line = reader.readLine();
-                Annotation document = new Annotation(line);
-                pipeline.annotate(document);
-                List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
-                for(CoreMap sentence: sentences) {
-                    for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-                        word = token.get(CoreAnnotations.TextAnnotation.class);
-                        if(lemmaT){
-                            word = stanfordLemmatizer.lemmatize(word).get(0);
-                        }
-//                        String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-                        if(ub) {
-                            if (featureVector.containsKey(word)) {
-                                featureVector.put(word, 1);
+                if(bb){
+                    if(lemmaT){
+                        for(String lbg:tweetInfo.getLemBigrams()){
+                            if (featureVector.containsKey(lbg)) {
+                                featureVector.put(lbg, 1);
                             }
                         }
                     }
-//                    Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-//                    SemanticGraph dependencies = sentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
-                    //System.out.println(Tree);
-                }
-                if(bb) {
-                    sentCount = 0;
-                    dp = new DocumentPreprocessor(sentencesPath + "/" + docId + ".txt");
-                    for (List sentence : dp) {
-                        for (int iter = 0; iter < sentence.size(); iter++) {
-                            if (iter == 0) {
-                                bigramS = "<s> " + sentence.get(0);
-                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
-                            }
-                            if (iter > 0) {
-                                bigramS = sentence.get(iter - 1) + " " + sentence.get(iter);
-                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
-                            }
-                            if ((iter == (sentence.size() - 1))) {
-                                bigramS = sentence.get(iter) + " <s>";
-                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
+                    else{
+                        for(String bg:tweetInfo.getBigrams()){
+                            if (featureVector.containsKey(bg)) {
+                                featureVector.put(bg, 1);
                             }
                         }
                     }
                 }
-                if(sentences.size() != sentCount){
-                    System.out.println("sizes dont match");
-                }
+//                BufferedReader reader = new BufferedReader(new FileReader(sentencesPath + "/" + docId + ".txt"));
+//                line = reader.readLine();
+//                Annotation document = new Annotation(line);
+//                pipeline.annotate(document);
+//                List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
+//                for(CoreMap sentence: sentences) {
+//                    for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+//                        word = token.get(CoreAnnotations.TextAnnotation.class);
+//                        if(lemmaT){
+//                            word = stanfordLemmatizer.lemmatize(word).get(0);
+//                        }
+////                        String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+//                        if(ub) {
+//                            if (featureVector.containsKey(word)) {
+//                                featureVector.put(word, 1);
+//                            }
+//                        }
+//                    }
+////                    Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+////                    SemanticGraph dependencies = sentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
+//                    //System.out.println(Tree);
+//                }
+//                if(bb) {
+//                    dp = new DocumentPreprocessor(sentencesPath + "/" + docId + ".txt");
+//                    for (List sentence : dp) {
+//                        for (int iter = 0; iter < sentence.size(); iter++) {
+//                            if (iter == 0) {
+//                                bigramS = "<s> " + sentence.get(0);
+//                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
+//                            }
+//                            if (iter > 0) {
+//                                bigramS = sentence.get(iter - 1) + " " + sentence.get(iter);
+//                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
+//                            }
+//                            if ((iter == (sentence.size() - 1))) {
+//                                bigramS = sentence.get(iter) + " <s>";
+//                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
+//                            }
+//                        }
+//                    }
+//                }
                 label = labelMap.get(docId);
                 int featureCounter;
                 if ((counter>=(num*3400)) &&  (counter<((num+1)*3400))){
@@ -305,7 +388,6 @@ public class FeatureExtractor {
             scannerIn.close();
         }
         long endTime   = System.currentTimeMillis();
-
         System.out.println((endTime-startTime)/1000.000+" seconds");
     }
 
@@ -345,27 +427,5 @@ public class FeatureExtractor {
         else{
             featureClassDistMap.put(ngram,new FeatureClassDist(label));
         }
-    }
-
-    private static void bigramTestAdder(boolean lemmaT, String bigramS, Map featureVector,StanfordLemmatizer stanfordLemmatizer){
-        if(lemmaT) {
-            bigramS = String.join(" ", stanfordLemmatizer.lemmatize(bigramS));
-        }
-        if (featureVector.containsKey(bigramS)) {
-            featureVector.put(bigramS, 1);
-        }
-    }
-
-    private static void bigramTrainAdder(boolean lemmaT, String bigramS, Map<String,Integer> bigramMap,
-                                         StanfordLemmatizer stanfordLemmatizer, Map featureClassDistMap, String label){
-        if(lemmaT) {
-            bigramS = String.join(" ", stanfordLemmatizer.lemmatize(bigramS));
-        }
-        if (bigramMap.containsKey(bigramS)) {
-            bigramMap.put(bigramS, bigramMap.get(bigramS) + 1);
-        } else {
-            bigramMap.put(bigramS, 1);
-        }
-        updateFeatureClassDistMap(featureClassDistMap, bigramS, label);
     }
 }

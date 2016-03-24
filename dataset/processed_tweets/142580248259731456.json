@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NN field)) (NP (NP (NN trip)) (NP-TMP (NN today)))))","depTree":"[field/NN dep>[trip/NN nmod:tmod>today/NN]]","postags":["NN","NN","NN"]}],"unigrams":["field","trip","today"],"bigrams":["<s> field","field trip","today <s>"],"lemUnigrams":["field","trip","today"],"lemBigrams":["<s> field","field trip","today <s>"]}

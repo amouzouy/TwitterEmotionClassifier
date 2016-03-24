@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NN study)) (NP (NN room) (NN time))))","depTree":"[study/NN dep>[time/NN compound>room/NN]]","postags":["NN","NN","NN"]}],"unigrams":["study","room","time"],"bigrams":["<s> study","study room","time <s>"],"lemUnigrams":["study","room","time"],"lemBigrams":["<s> study","study room","time <s>"]}

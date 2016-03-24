@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (S (VP (VBG Feeling) (ADJP (JJ empty)) (PP (IN inside)))))","depTree":"[Feeling/VBG xcomp>empty/JJ nmod>inside/IN]","postags":["VBG","JJ","IN"]}],"unigrams":["Feeling","empty","inside"],"bigrams":["<s> Feeling","Feeling empty","inside <s>"],"lemUnigrams":["feel","empty","inside"],"lemBigrams":["<s> feel","feel empty","inside <s>"]}

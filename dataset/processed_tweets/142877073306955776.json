@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NNP Eating)) (NP (NN beef) (NN noodle))))","depTree":"[Eating/NNP dep>[noodle/NN compound>beef/NN]]","postags":["NNP","NN","NN"]}],"unigrams":["Eating","beef","noodle"],"bigrams":["<s> Eating","Eating beef","noodle <s>"],"lemUnigrams":["Eating","beef","noodle"],"lemBigrams":["<s> Eating","Eating beef","noodle <s>"]}

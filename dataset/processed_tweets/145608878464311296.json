@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NNP Tommy) (NNP Cooper)) (NP (NN time))))","depTree":"[Cooper/NNP compound>Tommy/NNP dep>time/NN]","postags":["NNP","NNP","NN"]}],"unigrams":["Tommy","Cooper","time"],"bigrams":["<s> Tommy","Tommy Cooper","time <s>"],"lemUnigrams":["Tommy","Cooper","time"],"lemBigrams":["<s> Tommy","Tommy Cooper","time <s>"]}

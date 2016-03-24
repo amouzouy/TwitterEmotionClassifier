@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (S (VP (VB Swim) (VP (VB meet) (NP-TMP (NN tonight))))))","depTree":"[Swim/VB xcomp>[meet/VB nmod:tmod>tonight/NN]]","postags":["VB","VB","NN"]}],"unigrams":["Swim","meet","tonight"],"bigrams":["<s> Swim","Swim meet","tonight <s>"],"lemUnigrams":["swim","meet","tonight"],"lemBigrams":["<s> swim","swim meet","tonight <s>"]}

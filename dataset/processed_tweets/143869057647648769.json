@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (S (VP (VBG Wanting) (NP (JJ hot) (NN chocolate)))))","depTree":"[Wanting/VBG dobj>[chocolate/NN amod>hot/JJ]]","postags":["VBG","JJ","NN"]}],"unigrams":["Wanting","hot","chocolate"],"bigrams":["<s> Wanting","Wanting hot","chocolate <s>"],"lemUnigrams":["want","hot","chocolate"],"lemBigrams":["<s> want","want hot","chocolate <s>"]}

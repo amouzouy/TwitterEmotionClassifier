@@ -1,0 +1,1 @@
+{"tweetSentenceList":[{"constTree":"(ROOT (NP (NP (NNPS xmas)) (NP (NN tree) (NN shopping))))","depTree":"[xmas/NNPS dep>[shopping/NN compound>tree/NN]]","postags":["NNPS","NN","NN"]}],"unigrams":["xmas","tree","shopping"],"bigrams":["<s> xmas","xmas tree","shopping <s>"],"lemUnigrams":["xmas","tree","shopping"],"lemBigrams":["<s> xma","xmas tree","shopping <s>"]}
