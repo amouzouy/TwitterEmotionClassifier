@@ -1,14 +1,5 @@
-import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.process.PTBTokenizer;
-import edu.stanford.nlp.semgraph.SemanticGraph;
-import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
-import edu.stanford.nlp.trees.Tree;
-import edu.stanford.nlp.trees.TreeCoreAnnotations;
-import edu.stanford.nlp.util.CoreMap;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
@@ -18,13 +9,10 @@ public class FeatureExtractor {
 
     public static void main(String [] args) throws IOException {
 
-
-        int countImportant=0;
         Map<String,String> labelMap = new HashMap<>();
         Map<String,Integer> unigramMap = new HashMap<>();
         Map<String,Integer> bigramMap = new HashMap<>();
         Map<String,Integer> featureVector = new HashMap<>();
-        Map<String,Integer> lemmaMap = new HashMap<>();
         Map<String,FeatureClassDist> featureClassDistMap = new HashMap<>();
         List<String> docIds = new ArrayList<>();
 
@@ -35,23 +23,20 @@ public class FeatureExtractor {
         switch(System.getProperty("os.name")){
             case "Windows 10":
                 labelsPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/labels.txt";
-                sentencesPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/tweets";
+                sentencesPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/processed_tweets";
                 break;
             case "Linux":
                 labelsPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/labels.txt";
-                sentencesPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/tweets";
+                sentencesPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/processed_tweets";
                 break;
         }
 
         String idLabel, id, label;
-        PTBTokenizer ptbt;
-        DocumentPreprocessor dp;
-        String stringLabel, bigramS=null;
         int numFolds;
 
         numFolds = Integer.parseInt(args[0]);
         String param;
-        StanfordLemmatizer stanfordLemmatizer = new StanfordLemmatizer();
+        ObjectMapper objectMapper = new ObjectMapper();
         long startTime = System.currentTimeMillis();
 
         for(int i=1;i<args.length;i=i+2){
@@ -105,24 +90,19 @@ public class FeatureExtractor {
         * */
 
         Scanner scannerIn;
-        String lemmaStr;
-        int iterS=0;
-        String lastWord="";
 
         //loop over folds, for each fold, skip the 20% test data when creating feature vector,
         //when feature vector is created, loop over test data and populate
 
-        Properties props = new Properties();
-        props.put("annotators", "tokenize, ssplit");
-        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-        String line;
         for(int num=0;num<numFolds;num++) {
-
             labelMap.clear(); unigramMap.clear();bigramMap.clear();featureVector.clear();featureClassDistMap.clear();docIds.clear();
             scannerIn = new Scanner(new File(labelsPath));
             int counter=0;
-            String word;
             while (scannerIn.hasNext()) {
+
+                if (counter == 17000){
+                    break;
+                }
                 idLabel = scannerIn.nextLine();
                 id = idLabel.substring(0, 18);
                 label = idLabel.substring(19);
@@ -133,7 +113,7 @@ public class FeatureExtractor {
                     continue;
                 }
 
-                TweetInfo tweetInfo = new TweetInfo();
+                TweetInfo tweetInfo = objectMapper.readValue(new File(sentencesPath + "/" + id + ".json"), TweetInfo.class);
 
                 if(ub){
                     if(lemmaT){
@@ -188,57 +168,6 @@ public class FeatureExtractor {
                 if(dt){
 
                 }
-
-//                BufferedReader reader = new BufferedReader(new FileReader(sentencesPath + "/" + id + ".txt"));
-//                line = reader.readLine();
-//                Annotation document = new Annotation(line);
-//                pipeline.annotate(document);
-//                List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
-//                for(CoreMap sentence: sentences) {
-//                    for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-//                        word = token.get(CoreAnnotations.TextAnnotation.class);
-//                        if(lemmaT){
-//                            word = stanfordLemmatizer.lemmatize(word).get(0);
-//                        }
-////                        String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-////                      String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
-//                        if(ub) {
-//                            if (unigramMap.containsKey(word)) {
-//                                unigramMap.put(word, unigramMap.get(word) + 1);
-//                            } else {
-//                                unigramMap.put(word, 1);
-//                            }
-//                        }
-//                    }
-////                    Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-////                    tree.indentedListPrint();
-////                    tree.pennPrint();
-////
-////                    SemanticGraph dependencies = sentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
-////                    System.out.println("\n" + dependencies.toCompactString(true));
-////                    System.out.println();
-//                }
-//                if(bb) {
-//                    sentCount = 0;
-//                    dp = new DocumentPreprocessor(sentencesPath + "/" + id + ".txt");
-//                    for (List sentence : dp) {
-//                        sentCount++;
-//                        for (int iter = 0; iter < sentence.size(); iter++) {
-//                            if (iter == 0) {
-//                                bigramS = "<s> " + sentence.get(0);
-//                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
-//                            }
-//                            if (iter > 0) {
-//                                bigramS = sentence.get(iter - 1) + " " + sentence.get(iter);
-//                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
-//                            }
-//                            if ((iter == (sentence.size() - 1))) {
-//                                bigramS = sentence.get(iter) + " <s>";
-//                                bigramTrainAdder(lemmaT,bigramS,bigramMap,stanfordLemmatizer,featureClassDistMap,label);
-//                            }
-//                        }
-//                    }
-//                }
                 counter++;
             }
 
@@ -283,7 +212,7 @@ public class FeatureExtractor {
             for (String docId : docIds) {
                 counter++;
                 setAllValuesToZero((HashMap<String, Integer>) featureVector);
-                TweetInfo tweetInfo = new TweetInfo();
+                TweetInfo tweetInfo = objectMapper.readValue(new File(sentencesPath + "/" + docId + ".json"), TweetInfo.class);
                 if(ub){
                     if(lemmaT){
                         for(String lug:tweetInfo.getLemUnigrams()){
@@ -317,47 +246,6 @@ public class FeatureExtractor {
                         }
                     }
                 }
-//                BufferedReader reader = new BufferedReader(new FileReader(sentencesPath + "/" + docId + ".txt"));
-//                line = reader.readLine();
-//                Annotation document = new Annotation(line);
-//                pipeline.annotate(document);
-//                List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
-//                for(CoreMap sentence: sentences) {
-//                    for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-//                        word = token.get(CoreAnnotations.TextAnnotation.class);
-//                        if(lemmaT){
-//                            word = stanfordLemmatizer.lemmatize(word).get(0);
-//                        }
-////                        String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-//                        if(ub) {
-//                            if (featureVector.containsKey(word)) {
-//                                featureVector.put(word, 1);
-//                            }
-//                        }
-//                    }
-////                    Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-////                    SemanticGraph dependencies = sentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
-//                    //System.out.println(Tree);
-//                }
-//                if(bb) {
-//                    dp = new DocumentPreprocessor(sentencesPath + "/" + docId + ".txt");
-//                    for (List sentence : dp) {
-//                        for (int iter = 0; iter < sentence.size(); iter++) {
-//                            if (iter == 0) {
-//                                bigramS = "<s> " + sentence.get(0);
-//                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
-//                            }
-//                            if (iter > 0) {
-//                                bigramS = sentence.get(iter - 1) + " " + sentence.get(iter);
-//                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
-//                            }
-//                            if ((iter == (sentence.size() - 1))) {
-//                                bigramS = sentence.get(iter) + " <s>";
-//                                bigramTestAdder(lemmaT, bigramS, featureVector, stanfordLemmatizer);
-//                            }
-//                        }
-//                    }
-//                }
                 label = labelMap.get(docId);
                 int featureCounter;
                 if ((counter>=(num*3400)) &&  (counter<((num+1)*3400))){
