@@ -1,2 +1,3 @@
 Description,SVM flags,Preprocessing flags,CV folds
-Testing Lemmatization,-t 0,-ub 20 -l,5
+Checking new method correctness Part1,-t 0,-ub 10 -bb 50,5
+Checking new method correctness Part2,-t 0,-ub 10 -bb 50 -l,5
