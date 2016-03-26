@@ -244,3 +244,148 @@ CV folds: 5
      Anger       161       231       589        26        77       152       0.123     0.306     0.175
 
  Total Accuracy: 0.4912641920112948
+
+
+
+Results for date: 2016/03/25 18:45:33
+Description: tf is just raw count
+SVM flags: -t 0
+Preprocessing flags: -ub 100 -bb 100 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1247       268      1379        29       124        66       0.401     0.498     0.444
+   Sadness       289      1271      1255        53       140        92       0.410     0.485     0.445
+       Joy       515       466      5323        51       212       108       0.797     0.552     0.653
+   Disgust        81       115       261        72        38        36       0.119     0.261     0.164
+      Fear       243       257       844        40       811        77       0.357     0.572     0.439
+     Anger       129       241       577        31        94       164       0.133     0.302     0.184
+
+ Total Accuracy: 0.5228542855462086
+
+
+
+Results for date: 2016/03/25 20:05:27
+Description: tf is 1
+SVM flags: -t 0
+Preprocessing flags: -ub 100 -bb 100 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1245       265      1381        29       128        65       0.400     0.501     0.445
+   Sadness       280      1272      1267        49       138        94       0.410     0.486     0.445
+       Joy       518       461      5326        48       211       111       0.798     0.551     0.652
+   Disgust        79       111       265        68        39        41       0.113     0.254     0.156
+      Fear       239       259       848        40       808        78       0.356     0.571     0.438
+     Anger       122       247       574        34        92       167       0.135     0.300     0.186
+
+ Total Accuracy: 0.5227366315665627
+
+
+
+
+Results for date: 2016/03/25 22:32:34
+Description: tf is normalized
+SVM flags: -t 0
+Preprocessing flags: -ub 100 -bb 100 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1255       275      1366        31       121        65       0.403     0.501     0.447
+   Sadness       280      1270      1268        59       135        88       0.410     0.484     0.444
+       Joy       524       462      5320        55       208       106       0.797     0.552     0.652
+   Disgust        79       115       265        67        37        40       0.111     0.233     0.150
+      Fear       245       255       843        42       809        78       0.356     0.576     0.440
+     Anger       124       249       572        34        95       162       0.131     0.301     0.183
+
+ Total Accuracy: 0.5225601505970939
+
+
+
+Results for date: 2016/03/25 23:54:38
+Description: tf is normalized
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -bb 50 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1441       304      1072        54       166        76       0.463     0.483     0.473
+   Sadness       364      1343      1005        83       156       149       0.433     0.468     0.450
+       Joy       669       567      4899        96       264       180       0.734     0.594     0.657
+   Disgust        91       134       178       102        46        52       0.169     0.230     0.195
+      Fear       260       278       654        60       934        86       0.411     0.553     0.472
+     Anger       156       244       433        48       123       232       0.188     0.299     0.231
+
+ Total Accuracy: 0.5265603859050533
+
+
+
+Results for date: 2016/03/26 01:53:39
+Description: tf is raw count
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -bb 50 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1457       308      1056        51       157        84       0.468     0.486     0.477
+   Sadness       375      1341       995        82       165       142       0.433     0.464     0.448
+       Joy       668       571      4898        84       267       187       0.734     0.596     0.658
+   Disgust        90       133       177        90        61        52       0.149     0.216     0.177
+      Fear       251       283       654        62       938        84       0.413     0.551     0.472
+     Anger       155       252       433        47       115       234       0.189     0.299     0.232
+
+ Total Accuracy: 0.5269721748338138
+
+
+
+Results for date: 2016/03/26 11:09:50
+Description: Checking new method correctness Part1
+SVM flags: -t 0 with scaling of features
+Preprocessing flags: -ub 50 -bb 50 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1456       305      1059        56       157        80       0.468     0.492     0.480
+   Sadness       351      1359      1006        74       170       140       0.438     0.468     0.453
+       Joy       662       565      4926        95       251       176       0.738     0.598     0.660
+   Disgust        90       132       175        92        56        58       0.153     0.214     0.178
+      Fear       251       285       651        62       941        82       0.414     0.554     0.474
+     Anger       148       260       424        50       125       229       0.185     0.299     0.229
+
+ Total Accuracy: 0.5296193893758456
+
+
+
+Results for date: 2016/03/26 12:22:14
+Description: Running simple test with scaling and no weights
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -bb 50 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1456       305      1059        56       157        80       0.468     0.492     0.480
+   Sadness       351      1359      1006        74       170       140       0.438     0.468     0.453
+       Joy       662       565      4926        95       251       176       0.738     0.598     0.660
+   Disgust        90       132       175        92        56        58       0.153     0.214     0.178
+      Fear       251       285       651        62       941        82       0.414     0.554     0.474
+     Anger       148       260       424        50       125       229       0.185     0.299     0.229
+
+ Total Accuracy: 0.5296193893758456
+
+
+
+Results for date: 2016/03/26 12:47:58
+Description: Running simple test without scaling and no weights
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -bb 50 -l
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1440       299      1119        34       149        72       0.463     0.499     0.480
+   Sadness       343      1366      1053        58       149       131       0.441     0.473     0.456
+       Joy       619       549      5071        65       230       141       0.760     0.590     0.664
+   Disgust        89       139       198        82        46        49       0.136     0.252     0.177
+      Fear       252       284       693        46       929        68       0.409     0.573     0.477
+     Anger       141       249       466        41       118       221       0.179     0.324     0.230
+
+ Total Accuracy: 0.5358550502970763
