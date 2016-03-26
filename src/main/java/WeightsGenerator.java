@@ -5,38 +5,53 @@ import java.util.*;
 
 public class WeightsGenerator {
 
-    public static void main(String [] args) throws IOException {
+    private static int emotionToInt(String label) {
+        switch (label){
+            case "surprise":
+                return 0;
+            case "sadness":
+                return 1;
+            case "joy":
+                return 2;
+            case "disgust":
+                return 3;
+            case "fear":
+                return 4;
+            case "anger":
+                return 5;
+            default:
+                System.err.println("Error with label: "+label);
+                System.exit(-1);
+                return 6;
+        }
+    }
+
+    public static Map<String,List<Integer>> getWeightMap(Map<String,String> tweetEmotionMap, boolean lemmatized, int tfNorm) throws IOException {
 
         Map<String, List<Integer>> weightMap = new HashMap<>();
         Map<String, Term> termMap = new HashMap<>();
         List<String> allNgrams = new ArrayList<>();
         Set<String> allUniqueNgrams;
-        Map<String, String> tweetEmotionMap= new HashMap<>();
         String tweetsPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/processed_tweets";
-        List<Integer> emotionCounts = new ArrayList<>(Collections.nCopies(6,0));
+        List<Integer> emotionDocCounts = new ArrayList<>(Collections.nCopies(6,0));
+        List<Integer> emotionTermCounts = new ArrayList<>(Collections.nCopies(6,0));
 
         ObjectMapper objectMapper = new ObjectMapper();
-        BufferedReader bufferedReader = new BufferedReader(new FileReader("/home/sheryan/IdeaProjects/emotionclassifier/dataset/labels.txt"));
-
-        String line;
-        int index=0;
-        while((line=bufferedReader.readLine())!=null){
-            if(index==17000){
-                break;
-            }
-            index++;
-            tweetEmotionMap.put(line.split(" ")[0],line.split(" ")[1]);
-        }
 
         for(String id : tweetEmotionMap.keySet()){
             String emotion = tweetEmotionMap.get(id);
-            emotionCounts.set(emotionToInt(emotion),emotionCounts.get(emotionToInt(emotion))+1);
+            emotionDocCounts.set(emotionToInt(emotion),emotionDocCounts.get(emotionToInt(emotion))+1);
             TweetInfo tweetInfo = objectMapper.readValue(new File(tweetsPath + "/" + id + ".json"), TweetInfo.class);
-//            allNgrams.addAll(tweetInfo.getUnigrams());
-            allNgrams.addAll(tweetInfo.getLemUnigrams());
-//            allNgrams.addAll(tweetInfo.getBigrams());
-            allNgrams.addAll(tweetInfo.getLemBigrams());
+            if (lemmatized) {
+                allNgrams.addAll(tweetInfo.getLemUnigrams());
+                allNgrams.addAll(tweetInfo.getLemBigrams());
+            }
+            else {
+                allNgrams.addAll(tweetInfo.getUnigrams());
+                allNgrams.addAll(tweetInfo.getBigrams());
+            }
             for(String  term: allNgrams){
+                emotionTermCounts.set(emotionToInt(emotion),emotionTermCounts.get(emotionToInt(emotion))+1);
                 if(termMap.containsKey(term)){
                     Term termObj = termMap.get(term);
                     termObj.tCounts.set(emotionToInt(tweetEmotionMap.get(id)),
@@ -68,30 +83,10 @@ public class WeightsGenerator {
         }
 
         for(Term term : termMap.values()){
-            term.computeEmotionValues(emotionCounts);
+            term.computeEmotionValues(emotionDocCounts,emotionTermCounts, tfNorm);
             weightMap.put(term.term, term.emotionValueList);
         }
-        objectMapper.writeValue(new File("/home/sheryan/IdeaProjects/emotionclassifier/dataset/tfidf_maps/lemma_weights.json"),weightMap);
-    }
 
-    private static int emotionToInt(String label) {
-        switch (label){
-            case "surprise":
-                return 0;
-            case "sadness":
-                return 1;
-            case "joy":
-                return 2;
-            case "disgust":
-                return 3;
-            case "fear":
-                return 4;
-            case "anger":
-                return 5;
-            default:
-                System.err.println("Error with label: "+label);
-                System.exit(-1);
-                return 6;
-        }
+        return weightMap;
     }
 }

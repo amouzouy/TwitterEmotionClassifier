@@ -26,9 +26,11 @@ do
         END=$(expr ${f4} - 1)
         for ((i=0;i<=END;i++));
                 do
-                        ${LibSVMPath}/svm-train$ext ${svmParams[@]} ${trainPath}/file$i.train
-                        mv ./file${i}.train.model ${modelPath}
-                        ${LibSVMPath}/svm-predict$ext ${testPath}/file$i.test ${modelPath}/file$i.train.model ${outputPath}/file$i.output
+                        ${LibSVMPath}/svm-scale$ext ${trainPath}/file$i.train > ${trainPath}/file${i}_scaled.train
+                        ${LibSVMPath}/svm-scale$ext ${testPath}/file$i.test > ${testPath}/file${i}_scaled.test
+                        ${LibSVMPath}/svm-train$ext ${svmParams[@]} ${trainPath}/file${i}_scaled.train
+                        mv ./file${i}_scaled.train.model ${modelPath}
+                        ${LibSVMPath}/svm-predict$ext ${testPath}/file${i}_scaled.test ${modelPath}/file${i}_scaled.train.model ${outputPath}/file$i.output
                 done
                 java -cp ${jarPath}/emotionclassifier-1.0-SNAPSHOT.jar ResultsGenerator $f4 "$f2" "$f3" "$f1"
 				if [[ "$OSTYPE" == "linux-gnu" ]]; then

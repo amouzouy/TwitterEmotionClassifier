@@ -1,5 +1,3 @@
-import edu.stanford.nlp.process.DocumentPreprocessor;
-import edu.stanford.nlp.process.PTBTokenizer;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
@@ -14,10 +12,11 @@ public class FeatureExtractor {
         Map<String,Integer> bigramMap = new HashMap<>();
         Map<String,Integer> featureVector = new HashMap<>();
         Map<String,FeatureClassDist> featureClassDistMap = new HashMap<>();
+        Map<String,List<Integer>> weightMap = null;
         List<String> docIds = new ArrayList<>();
 
-        boolean ub=false,bb=false,up=false,bp=false,posB=false,ir=false,lemmaT=false, pt=false,dt=false;
-        int uFreqCutoff = 0, bFreqCutoff = 0;
+        boolean ub=false,bb=false,up=false,bp=false,posB=false,ir=false,lemmaT=false, pt=false,dt=false,weights = false;
+        int uFreqCutoff = 0, bFreqCutoff = 0, tfNorm=0;
         String labelsPath="", sentencesPath="";
 
         switch(System.getProperty("os.name")){
@@ -50,10 +49,11 @@ public class FeatureExtractor {
                     bb = true;
                     bFreqCutoff = Integer.parseInt(args[i + 1]);
                     break;
-                case "up":
-
+                case "wTI":
+                    weights = true;
+                    tfNorm = Integer.parseInt(args[i+1]);
                     break;
-                case "bp":
+                case "wPOS":
 
                     break;
                 case "pos":
@@ -93,13 +93,12 @@ public class FeatureExtractor {
 
         //loop over folds, for each fold, skip the 20% test data when creating feature vector,
         //when feature vector is created, loop over test data and populate
-
+        Map<String,String> tweetEmotionMap = new HashMap<>();
         for(int num=0;num<numFolds;num++) {
             labelMap.clear(); unigramMap.clear();bigramMap.clear();featureVector.clear();featureClassDistMap.clear();docIds.clear();
             scannerIn = new Scanner(new File(labelsPath));
             int counter=0;
             while (scannerIn.hasNext()) {
-
                 if (counter == 17000){
                     break;
                 }
@@ -111,6 +110,9 @@ public class FeatureExtractor {
                 if ((counter>=(num*3400)) &&  (counter<((num+1)*3400))){
                     counter++;
                     continue;
+                }
+                else if (weights){
+                    tweetEmotionMap.put(id,label);
                 }
 
                 TweetInfo tweetInfo = objectMapper.readValue(new File(sentencesPath + "/" + id + ".json"), TweetInfo.class);
@@ -182,6 +184,10 @@ public class FeatureExtractor {
                 featureVector.putAll(bigramMap);
             }
 
+            if(weights){
+                weightMap = WeightsGenerator.getWeightMap(tweetEmotionMap,lemmaT, tfNorm);
+            }
+
             //if time permits
             if(ir) {
                 int removedFeatures = 0;
@@ -217,14 +223,24 @@ public class FeatureExtractor {
                     if(lemmaT){
                         for(String lug:tweetInfo.getLemUnigrams()){
                             if (featureVector.containsKey(lug)) {
-                                featureVector.put(lug, 1);
+                                if(weights){
+                                    featureVector.put(lug, weightMap.get(lug).indexOf(1) + 1);
+                                }
+                                else{
+                                    featureVector.put(lug, 1);
+                                }
                             }
                         }
                     }
                     else{
                         for(String ug:tweetInfo.getUnigrams()){
                             if (featureVector.containsKey(ug)) {
-                                featureVector.put(ug, 1);
+                                if(weights){
+                                    featureVector.put(ug, weightMap.get(ug).indexOf(1) + 1);
+                                }
+                                else{
+                                    featureVector.put(ug, 1);
+                                }
                             }
                         }
                     }
@@ -234,14 +250,24 @@ public class FeatureExtractor {
                     if(lemmaT){
                         for(String lbg:tweetInfo.getLemBigrams()){
                             if (featureVector.containsKey(lbg)) {
-                                featureVector.put(lbg, 1);
+                                if(weights){
+                                    featureVector.put(lbg, weightMap.get(lbg).indexOf(1)+1);
+                                }
+                                else{
+                                    featureVector.put(lbg, 1);
+                                }
                             }
                         }
                     }
                     else{
                         for(String bg:tweetInfo.getBigrams()){
                             if (featureVector.containsKey(bg)) {
-                                featureVector.put(bg, 1);
+                                if(weights){
+                                    featureVector.put(bg, weightMap.get(bg).indexOf(1) + 1);
+                                }
+                                else{
+                                    featureVector.put(bg, 1);
+                                }
                             }
                         }
                     }
