@@ -14,12 +14,19 @@ public class ResultsGenerator {
         String actualLabelPath = "",predictedLabelPath = "";
         String svmFlags, preprocessingFlags, description = "N/A";
         int numFolds;
+        boolean scaling;
         String actualLabel, predictedLabel;
         Scanner scannerIn1,scannerIn2;
 
         numFolds = Integer.parseInt(args[0]);
         svmFlags = args[1];
         preprocessingFlags = args[2];
+        if(args[4]=="yes"){
+            scaling=true;
+        }
+        else{
+            scaling=false;
+        }
 
         if(args.length == 4){
             description = args[3];
@@ -70,6 +77,7 @@ public class ResultsGenerator {
         Date date = new Date();
         writer.println("\n\n\nResults for date: " + dateFormat.format(date) +
                 "\nDescription: " + description +
+                "\nScaling: : " + scaling +
                 "\nSVM flags: " + svmFlags +
                 "\nPreprocessing flags: " + preprocessingFlags +
                 "\nCV folds: " + numFolds + "\n");

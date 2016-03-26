@@ -39,7 +39,7 @@ do
                         mv ./file${i}${scaling}.train.model ${modelPath}
                         ${LibSVMPath}/svm-predict$ext ${testPath}/file${i}${scaling}.test ${modelPath}/file${i}${scaling}.train.model ${outputPath}/file$i.output
                 done
-                java -cp ${jarPath}/emotionclassifier-1.0-SNAPSHOT.jar ResultsGenerator $f4 "$f2" "$f3" "$f1"
+                java -cp ${jarPath}/emotionclassifier-1.0-SNAPSHOT.jar ResultsGenerator $f4 "$f2" "$f3" "$f1" "f5"
 				if [[ "$OSTYPE" == "linux-gnu" ]]; then
 						rm ${testPath}/*.test ${outputPath}/*.output ${trainPath}/*.train ${modelPath}/*.model
 				elif [[ "$OSTYPE" == "cygwin" ]]; then
