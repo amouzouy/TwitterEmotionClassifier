@@ -1,3 +1,4 @@
+import com.google.common.collect.Lists;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
@@ -14,9 +15,10 @@ public class FeatureExtractor {
         Map<String,FeatureClassDist> featureClassDistMap = new HashMap<>();
         Map<String,List<Integer>> weightMap = null;
         List<String> docIds = new ArrayList<>();
+        Map<String,Integer> sortedPOS;
 
         boolean ub=false,bb=false,up=false,bp=false,posB=false,ir=false,lemmaT=false, pt=false,dt=false,weights = false;
-        int uFreqCutoff = 0, bFreqCutoff = 0, tfNorm=0;
+        int uFreqCutoff = 0, bFreqCutoff = 0, tfNorm=0, posCutoff=0;
         String labelsPath="", sentencesPath="";
 
         switch(System.getProperty("os.name")){
@@ -58,6 +60,7 @@ public class FeatureExtractor {
                     break;
                 case "pos":
                     posB=true;
+                    posCutoff = Integer.parseInt(args[i+1]);
                     break;
                 case "pt":
                     pt=true;
@@ -94,8 +97,10 @@ public class FeatureExtractor {
         //loop over folds, for each fold, skip the 20% test data when creating feature vector,
         //when feature vector is created, loop over test data and populate
         Map<String,String> tweetEmotionMap = new HashMap<>();
+        HashMap<String,Integer> posCountMap = new HashMap<>();
         for(int num=0;num<numFolds;num++) {
             labelMap.clear(); unigramMap.clear();bigramMap.clear();featureVector.clear();featureClassDistMap.clear();docIds.clear();
+            posCountMap.clear();
             scannerIn = new Scanner(new File(labelsPath));
             int counter=0;
             while (scannerIn.hasNext()) {
@@ -160,7 +165,16 @@ public class FeatureExtractor {
                 }
 
                 if(posB){
-
+                    for(TweetSentence tweetSent : tweetInfo.getTweetSentenceList()){
+                        for(String posTag : tweetSent.getPOSTags()){
+                            if(posCountMap.containsKey(posTag)){
+                                posCountMap.put(posTag,posCountMap.get(posTag)+1);
+                            }
+                            else{
+                                posCountMap.put(posTag,1);
+                            }
+                        }
+                    }
                 }
 
                 if(pt){
@@ -186,6 +200,18 @@ public class FeatureExtractor {
 
             if(weights){
                 weightMap = WeightsGenerator.getWeightMap(tweetEmotionMap,lemmaT, tfNorm);
+            }
+
+            if(posB){
+                sortedPOS= sortByValues(posCountMap);
+                int posCount=0;
+                for(Map.Entry entry: sortedPOS.entrySet()){
+                    if(posCount == posCutoff){
+                        break;
+                    }
+                    posCount++;
+                    featureVector.put((String)entry.getKey(),0);
+                }
             }
 
             //if time permits
@@ -272,6 +298,15 @@ public class FeatureExtractor {
                         }
                     }
                 }
+                if(posB){
+                    for(TweetSentence tweetSent : tweetInfo.getTweetSentenceList()){
+                        for(String posTag : tweetSent.getPOSTags()){
+                            if(featureVector.containsKey(posTag)){
+                                featureVector.put(posTag,featureVector.get(posTag)+1);
+                            }
+                        }
+                    }
+                }
                 label = labelMap.get(docId);
                 int featureCounter;
                 if ((counter>=(num*3400)) &&  (counter<((num+1)*3400))){
@@ -341,5 +376,26 @@ public class FeatureExtractor {
         else{
             featureClassDistMap.put(ngram,new FeatureClassDist(label));
         }
+    }
+
+    private static HashMap sortByValues(HashMap map) {
+        List list = new LinkedList(map.entrySet());
+        // Defined Custom Comparator here
+        Collections.sort(list, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Comparable) ((Map.Entry) (o1)).getValue())
+                        .compareTo(((Map.Entry) (o2)).getValue());
+            }
+        });
+
+        // Here I am copying the sorted list in HashMap
+        // using LinkedHashMap to preserve the insertion order
+        HashMap sortedHashMap = new LinkedHashMap();
+        list = Lists.reverse(list);
+        for (Iterator it = list.iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+            sortedHashMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedHashMap;
     }
 }
