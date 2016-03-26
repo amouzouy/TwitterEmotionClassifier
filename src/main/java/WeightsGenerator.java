@@ -32,7 +32,15 @@ public class WeightsGenerator {
         Map<String, Term> termMap = new HashMap<>();
         List<String> allNgrams = new ArrayList<>();
         Set<String> allUniqueNgrams;
-        String tweetsPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/processed_tweets";
+        String tweetsPath = "";
+        switch(System.getProperty("os.name")){
+            case "Windows 10":
+                tweetsPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/processed_tweets";
+                break;
+            case "Linux":
+                tweetsPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/processed_tweets";
+                break;
+        }
         List<Integer> emotionDocCounts = new ArrayList<>(Collections.nCopies(6,0));
         List<Integer> emotionTermCounts = new ArrayList<>(Collections.nCopies(6,0));
 
