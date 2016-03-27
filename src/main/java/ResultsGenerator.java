@@ -21,7 +21,7 @@ public class ResultsGenerator {
         numFolds = Integer.parseInt(args[0]);
         svmFlags = args[1];
         preprocessingFlags = args[2];
-        if(args[4]=="yes"){
+        if(args[4].equals("yes")){
             scaling=true;
         }
         else{
