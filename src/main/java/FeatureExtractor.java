@@ -1,8 +1,10 @@
 import com.google.common.collect.Lists;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class FeatureExtractor {
 
@@ -16,19 +18,22 @@ public class FeatureExtractor {
         Map<String,List<Integer>> weightMap = null;
         List<String> docIds = new ArrayList<>();
         Map<String,Integer> sortedPOS;
+        Map<String,Integer> totalPOSCount = new HashMap<>();
 
-        boolean ub=false,bb=false,up=false,bp=false,posB=false,ir=false,lemmaT=false, pt=false,dt=false,weights = false;
-        int uFreqCutoff = 0, bFreqCutoff = 0, tfNorm=0, posCutoff=0;
-        String labelsPath="", sentencesPath="";
+        boolean ub=false,bb=false,posF=false,posC=false,ir=false,lemmaT=false, pt=false,dt=false,weights = false;
+        int uFreqCutoff = 0, bFreqCutoff = 0, tfNorm=0, posCCutoff=0, posFCutoff=0,posCMap=0,posFMap=0;
+        String labelsPath="", sentencesPath="", posJsonPath="";
 
         switch(System.getProperty("os.name")){
             case "Windows 10":
                 labelsPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/labels.txt";
                 sentencesPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/dataset/processed_tweets";
+                posJsonPath = "C:/cygwin/home/Sheryan/EmotionClassifier/TwitterEmotionClassifier/POS";
                 break;
             case "Linux":
                 labelsPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/labels.txt";
                 sentencesPath = "/home/sheryan/IdeaProjects/emotionclassifier/dataset/processed_tweets";
+                posJsonPath = "/home/sheryan/IdeaProjects/emotionclassifier/POS";
                 break;
         }
 
@@ -55,12 +60,17 @@ public class FeatureExtractor {
                     weights = true;
                     tfNorm = Integer.parseInt(args[i+1]);
                     break;
-                case "wPOS":
-
+                case "posF":
+                    posF=true;
+                    posFCutoff = Integer.parseInt(args[i+1]);
+                    posFMap = Integer.parseInt(args[i+2]);
+                    i++;
                     break;
-                case "pos":
-                    posB=true;
-                    posCutoff = Integer.parseInt(args[i+1]);
+                case "posC":
+                    posC=true;
+                    posCCutoff = Integer.parseInt(args[i+1]);
+                    posCMap = Integer.parseInt(args[i+2]);
+                    i++;
                     break;
                 case "pt":
                     pt=true;
@@ -79,25 +89,39 @@ public class FeatureExtractor {
             }
         }
 
-        /*
-        * -ub n (add unigrams, with cutoff of n)
-        * -bb n (add bigrams, with cutoff of n)
-        * -up (unigram probabilities)
-        * -bp (bigram probabilities)
-        * -pos part of speech
-        * -pt parse tree
-        * -s stemming?
-        * -ir n (irrelevance cutoff for ub,bb)
-        * -d dependency tree features
-        * -l use lemmatization for n-grams
-        * */
-
         Scanner scannerIn;
 
         //loop over folds, for each fold, skip the 20% test data when creating feature vector,
         //when feature vector is created, loop over test data and populate
         Map<String,String> tweetEmotionMap = new HashMap<>();
         HashMap<String,Integer> posCountMap = new HashMap<>();
+        HashMap<String,Double> posValMap = new HashMap<>();
+        Set<String> posFilterSet = new HashSet<>();
+        List<POSTagValues> posTagValuesList;
+
+        int countF = 0;
+
+        if(posF){
+            if(posFMap==0){
+                posCountMap = objectMapper.readValue(new File(posJsonPath+"counts.json"), new TypeReference<Map<String,Integer>>() {
+                });
+                sortedPOS = sortByValues(posCountMap,true);
+            }
+            else{
+                posTagValuesList = objectMapper.readValue(new File(posJsonPath+"values.json"), new TypeReference<List<POSTagValues>>() {
+                });
+                posTagValuesList.stream().forEach(posTagValues -> posValMap.put(posTagValues.getPosTag(),posTagValues.getSeparationValue()));
+                sortedPOS = sortByValues(posValMap,false);
+            }
+            for(Map.Entry<String,Integer> entry : sortedPOS.entrySet()){
+                if(countF == posFCutoff){
+                    break;
+                }
+                posFilterSet.add(entry.getKey());
+                countF++;
+            }
+        }
+
         for(int num=0;num<numFolds;num++) {
             labelMap.clear(); unigramMap.clear();bigramMap.clear();featureVector.clear();featureClassDistMap.clear();docIds.clear();
             posCountMap.clear();
@@ -121,23 +145,28 @@ public class FeatureExtractor {
                 }
 
                 TweetInfo tweetInfo = objectMapper.readValue(new File(sentencesPath + "/" + id + ".json"), TweetInfo.class);
-
+                List<String> totalPOSlist = tweetInfo.getTweetSentenceList().stream().flatMap(
+                        tweetSentence -> tweetSentence.getPOSTags().stream()).collect(Collectors.toList());
                 if(ub){
                     if(lemmaT){
                         for(String lug:tweetInfo.getLemUnigrams()){
-                            if (unigramMap.containsKey(lug)) {
-                                unigramMap.put(lug, unigramMap.get(lug) + 1);
-                            } else {
-                                unigramMap.put(lug, 1);
+                            if(!posF || posFilterSet.contains(totalPOSlist.get(tweetInfo.getLemUnigrams().indexOf(lug)))) {
+                                if (unigramMap.containsKey(lug)) {
+                                    unigramMap.put(lug, unigramMap.get(lug) + 1);
+                                } else {
+                                    unigramMap.put(lug, 1);
+                                }
                             }
                         }
                     }
                     else{
                         for(String ug:tweetInfo.getUnigrams()){
-                            if (unigramMap.containsKey(ug)) {
-                                unigramMap.put(ug, unigramMap.get(ug) + 1);
-                            } else {
-                                unigramMap.put(ug, 1);
+                            if(!posF || posFilterSet.contains(totalPOSlist.get(tweetInfo.getUnigrams().indexOf(ug)))) {
+                                if (unigramMap.containsKey(ug)) {
+                                    unigramMap.put(ug, unigramMap.get(ug) + 1);
+                                } else {
+                                    unigramMap.put(ug, 1);
+                                }
                             }
                         }
                     }
@@ -164,7 +193,7 @@ public class FeatureExtractor {
                     }
                 }
 
-                if(posB){
+                if(posC){
                     for(TweetSentence tweetSent : tweetInfo.getTweetSentenceList()){
                         for(String posTag : tweetSent.getPOSTags()){
                             if(posCountMap.containsKey(posTag)){
@@ -202,11 +231,19 @@ public class FeatureExtractor {
                 weightMap = WeightsGenerator.getWeightMap(tweetEmotionMap,lemmaT, tfNorm);
             }
 
-            if(posB){
-                sortedPOS= sortByValues(posCountMap);
+            if(posC){
+                if(posCMap == 0) {
+                    sortedPOS = sortByValues(posCountMap,true);
+                }
+                else {
+                    posTagValuesList = objectMapper.readValue(new File(posJsonPath+"values.json"), new TypeReference<List<POSTagValues>>() {
+                    });
+                    posTagValuesList.stream().forEach(posTagValues -> posValMap.put(posTagValues.getPosTag(),posTagValues.getSeparationValue()));
+                    sortedPOS = sortByValues(posValMap,false);
+                }
                 int posCount=0;
                 for(Map.Entry entry: sortedPOS.entrySet()){
-                    if(posCount == posCutoff){
+                    if(posCount == posCCutoff){
                         break;
                     }
                     posCount++;
@@ -245,15 +282,18 @@ public class FeatureExtractor {
                 counter++;
                 setAllValuesToZero((HashMap<String, Integer>) featureVector);
                 TweetInfo tweetInfo = objectMapper.readValue(new File(sentencesPath + "/" + docId + ".json"), TweetInfo.class);
+                List<String> totalPOSlist = tweetInfo.getTweetSentenceList().stream().flatMap(
+                        tweetSentence -> tweetSentence.getPOSTags().stream()).collect(Collectors.toList());
                 if(ub){
                     if(lemmaT){
                         for(String lug:tweetInfo.getLemUnigrams()){
-                            if (featureVector.containsKey(lug)) {
-                                if(weights){
-                                    featureVector.put(lug, weightMap.get(lug).indexOf(1) + 1);
-                                }
-                                else{
-                                    featureVector.put(lug, 1);
+                            if(!posF || posFilterSet.contains(totalPOSlist.get(tweetInfo.getLemUnigrams().indexOf(lug)))) {
+                                if (featureVector.containsKey(lug)) {
+                                    if (weights) {
+                                        featureVector.put(lug, weightMap.get(lug).indexOf(1) + 1);
+                                    } else {
+                                        featureVector.put(lug, 1);
+                                    }
                                 }
                             }
                         }
@@ -261,11 +301,12 @@ public class FeatureExtractor {
                     else{
                         for(String ug:tweetInfo.getUnigrams()){
                             if (featureVector.containsKey(ug)) {
-                                if(weights){
-                                    featureVector.put(ug, weightMap.get(ug).indexOf(1) + 1);
-                                }
-                                else{
-                                    featureVector.put(ug, 1);
+                                if(!posF || posFilterSet.contains(totalPOSlist.get(tweetInfo.getUnigrams().indexOf(ug)))) {
+                                    if (weights) {
+                                        featureVector.put(ug, weightMap.get(ug).indexOf(1) + 1);
+                                    } else {
+                                        featureVector.put(ug, 1);
+                                    }
                                 }
                             }
                         }
@@ -298,7 +339,7 @@ public class FeatureExtractor {
                         }
                     }
                 }
-                if(posB){
+                if(posC){
                     for(TweetSentence tweetSent : tweetInfo.getTweetSentenceList()){
                         for(String posTag : tweetSent.getPOSTags()){
                             if(featureVector.containsKey(posTag)){
@@ -324,8 +365,7 @@ public class FeatureExtractor {
                     trainingDocs++;
                     writer1.print((int) emotionToDouble(label));
                     featureCounter = 1;
-                    for (Iterator<Map.Entry<String, Integer>> it = featureVector.entrySet().iterator(); it.hasNext(); ) {
-                        Map.Entry<String, Integer> entry = it.next();
+                    for (Map.Entry<String, Integer> entry : featureVector.entrySet()) {
                         writer1.print(" " + featureCounter + ":" + entry.getValue());
                         featureCounter++;
                     }
@@ -337,7 +377,7 @@ public class FeatureExtractor {
             scannerIn.close();
         }
         long endTime   = System.currentTimeMillis();
-        System.out.println((endTime-startTime)/1000.000+" seconds");
+        System.out.println((endTime - startTime) / 1000.000 + " seconds");
     }
 
     private static double emotionToDouble(String label) {
@@ -378,7 +418,7 @@ public class FeatureExtractor {
         }
     }
 
-    private static HashMap sortByValues(HashMap map) {
+    private static HashMap sortByValues(HashMap map, boolean reverseList) {
         List list = new LinkedList(map.entrySet());
         // Defined Custom Comparator here
         Collections.sort(list, new Comparator() {
@@ -391,7 +431,9 @@ public class FeatureExtractor {
         // Here I am copying the sorted list in HashMap
         // using LinkedHashMap to preserve the insertion order
         HashMap sortedHashMap = new LinkedHashMap();
-        list = Lists.reverse(list);
+        if(reverseList) {
+            list = Lists.reverse(list);
+        }
         for (Iterator it = list.iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
             sortedHashMap.put(entry.getKey(), entry.getValue());
