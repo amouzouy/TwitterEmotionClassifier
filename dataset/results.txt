@@ -1196,3 +1196,288 @@ CV folds: 5
      Anger       126       250       551        38        81       190       0.154     0.336     0.211
 
  Total Accuracy: 0.5421495382081299
+
+
+
+Results for date: 2016/03/28 05:34:34
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posF 5 1
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise       547       148      2410         0         7         1       0.176     0.448     0.252
+   Sadness       140       545      2408         0         6         1       0.176     0.385     0.241
+       Joy       333       279      6033         0        30         0       0.904     0.431     0.583
+   Disgust        38        81       477         0         7         0       0.000       NaN       NaN
+      Fear       120       179      1690         0       282         1       0.124     0.808     0.215
+     Anger        44       184       991         0        17         0       0.000     0.000       NaN
+
+ Total Accuracy: 0.43573151361844814
+
+
+
+Results for date: 2016/03/28 05:44:30
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posF 15 1
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1125       270      1595         2       100        21       0.361     0.539     0.433
+   Sadness       233      1141      1578        11        93        44       0.368     0.443     0.402
+       Joy       397       459      5655         6       121        37       0.847     0.515     0.641
+   Disgust        56       130       355        12        28        22       0.020     0.293     0.037
+      Fear       181       292      1089         2       689        19       0.303     0.629     0.409
+     Anger        94       284       702         8        65        83       0.067     0.367     0.114
+
+ Total Accuracy: 0.5120889464086122
+
+
+
+Results for date: 2016/03/28 05:56:45
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posF 25 1
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1269       261      1391        27       117        48       0.408     0.539     0.464
+   Sadness       256      1274      1326        45       111        88       0.411     0.483     0.444
+       Joy       445       474      5487        34       166        69       0.822     0.549     0.659
+   Disgust        72       122       269        64        37        39       0.106     0.286     0.155
+      Fear       201       256       900        22       831        62       0.366     0.622     0.461
+     Anger       111       252       614        32        73       154       0.125     0.335     0.182
+
+ Total Accuracy: 0.5340902406023884
+
+
+
+Results for date: 2016/03/28 06:09:58
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posF 35 1
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1366       265      1276        21       123        62       0.439     0.544     0.486
+   Sadness       262      1334      1239        46       117       102       0.430     0.482     0.455
+       Joy       472       496      5383        27       199        98       0.806     0.567     0.666
+   Disgust        73       141       238        70        38        43       0.116     0.310     0.169
+      Fear       215       278       806        27       873        73       0.384     0.610     0.472
+     Anger       122       254       556        35        81       188       0.152     0.332     0.209
+
+ Total Accuracy: 0.542031884228484
+
+
+
+Results for date: 2016/03/28 06:23:27
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posF -1 1
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1365       265      1270        25       126        62       0.438     0.543     0.485
+   Sadness       258      1336      1234        46       125       101       0.431     0.482     0.455
+       Joy       480       503      5367        28       197       100       0.804     0.568     0.666
+   Disgust        72       136       226        79        45        45       0.131     0.322     0.186
+      Fear       214       281       801        29       879        68       0.387     0.605     0.472
+     Anger       126       250       551        38        81       190       0.154     0.336     0.211
+
+ Total Accuracy: 0.5421495382081299
+
+
+
+Results for date: 2016/03/28 06:31:10
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posC 5 0 -posF 5 0
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise       753       158      2167         0        28         7       0.242     0.520     0.330
+   Sadness       157       636      2277         0        23         7       0.205     0.438     0.279
+       Joy       329       315      5981         0        40        10       0.896     0.444     0.594
+   Disgust        33        56       506         0         5         3       0.000       NaN       NaN
+      Fear       119       180      1522         0       445         6       0.196     0.808     0.315
+     Anger        57       106      1017         0        10        46       0.037     0.582     0.070
+
+ Total Accuracy: 0.4624389669980587
+
+
+
+Results for date: 2016/03/28 06:45:38
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posC 15 0 -posF 15 0
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1274       262      1396        21       112        48       0.409     0.524     0.460
+   Sadness       280      1252      1323        32       133        80       0.404     0.480     0.439
+       Joy       480       464      5402        26       226        77       0.809     0.550     0.655
+   Disgust        69       123       248        66        55        42       0.109     0.333     0.165
+      Fear       218       252       861        17       856        68       0.377     0.580     0.457
+     Anger       109       255       585        36        94       157       0.127     0.333     0.184
+
+ Total Accuracy: 0.5298546973351373
+
+
+
+Results for date: 2016/03/28 07:02:49
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posC 25 0 -posF 25 0
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1396       281      1220        23       124        69       0.448     0.535     0.488
+   Sadness       304      1365      1170        44       121        96       0.440     0.482     0.460
+       Joy       502       505      5350        26       206        86       0.801     0.577     0.671
+   Disgust        83       122       234        73        45        46       0.121     0.326     0.177
+      Fear       204       293       771        26       904        74       0.398     0.605     0.480
+     Anger       118       268       530        32        95       193       0.156     0.342     0.214
+
+ Total Accuracy: 0.5459732925466204
+
+
+
+Results for date: 2016/03/28 07:20:59
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posC 35 0 -posF 35 0
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1429       293      1179        24       123        65       0.459     0.538     0.495
+   Sadness       308      1362      1153        45       126       106       0.439     0.478     0.458
+       Joy       506       516      5320        36       199        98       0.797     0.581     0.672
+   Disgust        81       124       234        74        46        44       0.123     0.303     0.175
+      Fear       208       290       760        34       894        86       0.393     0.602     0.476
+     Anger       126       265       506        31        98       210       0.170     0.345     0.228
+
+ Total Accuracy: 0.5464439084652039
+
+
+
+Results for date: 2016/03/28 07:39:48
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posC -1 0 -posF -1 0
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1431       291      1149        31       138        73       0.460     0.532     0.493
+   Sadness       312      1358      1151        39       135       105       0.438     0.476     0.456
+       Joy       518       527      5281        40       212        97       0.791     0.583     0.672
+   Disgust        84       118       226        76        52        47       0.126     0.291     0.176
+      Fear       222       289       743        36       898        84       0.395     0.586     0.472
+     Anger       124       269       503        39        97       204       0.165     0.334     0.221
+
+ Total Accuracy: 0.5440320018824637
+
+
+
+Results for date: 2016/03/28 07:44:22
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posC 5 1 -posF 5 1
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise       561       144      2396         0        11         1       0.180     0.454     0.258
+   Sadness       144       538      2404         0        13         1       0.174     0.384     0.239
+       Joy       331       282      6024         0        38         0       0.902     0.431     0.583
+   Disgust        34        84       478         0         6         1       0.000       NaN       NaN
+      Fear       119       171      1695         0       286         1       0.126     0.769     0.216
+     Anger        47       183       988         0        18         0       0.000     0.000       NaN
+
+ Total Accuracy: 0.435849167598094
+
+
+
+Results for date: 2016/03/28 07:57:13
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posC 15 1 -posF 15 1
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1212       296      1487         4        94        20       0.389     0.529     0.448
+   Sadness       282      1163      1496        11        95        53       0.375     0.452     0.410
+       Joy       439       431      5599         5       159        42       0.839     0.525     0.646
+   Disgust        65       133       333        15        34        23       0.025     0.300     0.046
+      Fear       194       289      1066         7       693        23       0.305     0.601     0.405
+     Anger       100       262       686         8        79       101       0.082     0.385     0.135
+
+ Total Accuracy: 0.5166774516148008
+
+
+
+Results for date: 2016/03/28 08:15:58
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posC 25 1 -posF 25 1
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1331       262      1317        25       122        56       0.428     0.529     0.473
+   Sadness       296      1270      1292        46       110        86       0.410     0.482     0.443
+       Joy       489       473      5409        39       185        80       0.810     0.557     0.660
+   Disgust        76       118       251        75        42        41       0.124     0.309     0.177
+      Fear       205       263       867        24       849        64       0.374     0.612     0.464
+     Anger       117       250       582        34        80       173       0.140     0.346     0.199
+
+ Total Accuracy: 0.5357373963174304
+
+
+
+Results for date: 2016/03/28 10:20:49
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posC 35 1 -posF 35 1
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1405       295      1192        29       120        72       0.451     0.533     0.489
+   Sadness       308      1343      1168        46       129       106       0.433     0.477     0.454
+       Joy       509       509      5321        30       205       101       0.797     0.579     0.671
+   Disgust        80       130       226        80        47        40       0.133     0.321     0.188
+      Fear       213       277       776        31       893        82       0.393     0.596     0.474
+     Anger       123       260       508        33       104       208       0.168     0.342     0.225
+
+ Total Accuracy: 0.5441496558621095
+
+
+
+Results for date: 2016/03/28 10:42:19
+Description: N/A
+Scaling: : false
+SVM flags: -t 0
+Preprocessing flags: -ub 50 -l -posC -1 1 -posF -1 1
+CV folds: 5
+
+			  Surprise   Sadness     Joy      Disgust    Fear      Anger    Recall   Precision  F1-Score
+  Surprise      1431       291      1149        31       138        73       0.460     0.532     0.493
+   Sadness       312      1358      1151        39       135       105       0.438     0.476     0.456
+       Joy       518       527      5281        40       212        97       0.791     0.583     0.672
+   Disgust        84       118       226        76        52        47       0.126     0.291     0.176
+      Fear       222       289       743        36       898        84       0.395     0.586     0.472
+     Anger       124       269       503        39        97       204       0.165     0.334     0.221
+
+ Total Accuracy: 0.5440320018824637
