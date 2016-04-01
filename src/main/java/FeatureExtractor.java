@@ -516,7 +516,7 @@ public class FeatureExtractor {
         }
     }
 
-    private static HashMap sortByValues(HashMap map, boolean reverseList) {
+    public static HashMap sortByValues(Map map, boolean reverseList) {
         List list = new LinkedList(map.entrySet());
         // Defined Custom Comparator here
         Collections.sort(list, new Comparator() {
