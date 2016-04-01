@@ -1,4 +1,7 @@
 import com.google.common.collect.Lists;
+import edu.stanford.nlp.semgraph.SemanticGraph;
+import edu.stanford.nlp.trees.SimpleTree;
+import edu.stanford.nlp.trees.Tree;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -74,6 +77,7 @@ public class FeatureExtractor {
                     break;
                 case "pt":
                     pt=true;
+                    i--;
                     break;
                 case "ir":
                     ir = true;
@@ -81,6 +85,7 @@ public class FeatureExtractor {
                     break;
                 case "dt":
                     dt=true;
+                    i--;
                     break;
                 case "l":
                     lemmaT = true;
@@ -207,11 +212,31 @@ public class FeatureExtractor {
                 }
 
                 if(pt){
+                    PTFeatures ptFeatures;
+                    List<String> trees = tweetInfo.getTweetSentenceList().stream()
+                            .map(tweetSentence -> tweetSentence.getConstTree())
+                            .collect(Collectors.toList());
 
+                    ptFeatures = new PTFeatures(trees);
+
+                    featureVector.putAll(ptFeatures.getChildCounts(0));
+                    //featureVector.putAll(ptFeatures.getRewriteRules(0));
+                    featureVector.putAll(ptFeatures.getNtPOSTags(0));
+                    featureVector.putAll(ptFeatures.getChildCountsHead(0));
                 }
 
                 if(dt){
+                    DTFeatures dtFeatures;
+                    List<String> depTrees = tweetInfo.getTweetSentenceList().stream()
+                            .map(tweetSentence -> tweetSentence.getDepTree())
+                            .collect(Collectors.toList());
 
+                    dtFeatures = new DTFeatures(depTrees);
+
+                    featureVector.putAll(dtFeatures.getDependencyCounts(0));
+                    featureVector.putAll(dtFeatures.getDepRules(0));
+                    featureVector.putAll(dtFeatures.getDepRulesSimple(0));
+                    featureVector.putAll(dtFeatures.getDepSkeletons(0));
                 }
                 counter++;
             }
@@ -348,6 +373,62 @@ public class FeatureExtractor {
                         }
                     }
                 }
+                if(pt){
+                    PTFeatures ptFeatures;
+                    List<String> trees = tweetInfo.getTweetSentenceList().stream()
+                            .map(tweetSentence -> tweetSentence.getConstTree())
+                            .collect(Collectors.toList());
+                    ptFeatures = new PTFeatures(trees);
+
+                    for(String childCounts : ptFeatures.getChildCounts(1).keySet()){
+                        if(featureVector.containsKey(childCounts)){
+                            featureVector.put(childCounts,ptFeatures.getChildCounts(1).get(childCounts));
+                        }
+                    }
+                    for(String rewriteRule : ptFeatures.getRewriteRules(1).keySet()){
+                        if(featureVector.containsKey(rewriteRule)){
+                            featureVector.put(rewriteRule,ptFeatures.getRewriteRules(1).get(rewriteRule));
+                        }
+                    }
+                    for(String ntPosTag : ptFeatures.getNtPOSTags(1).keySet()){
+                        if(featureVector.containsKey(ntPosTag)){
+                            featureVector.put(ntPosTag,ptFeatures.getNtPOSTags(1).get(ntPosTag));
+                        }
+                    }
+                    for(String simpleRule : ptFeatures.getChildCountsHead(1).keySet()){
+                        if(featureVector.containsKey(simpleRule)){
+                            featureVector.put(simpleRule,ptFeatures.getChildCountsHead(1).get(simpleRule));
+                        }
+                    }
+                }
+                if(dt){
+                    DTFeatures dtFeatures;
+                    List<String> depTrees = tweetInfo.getTweetSentenceList().stream()
+                            .map(tweetSentence -> tweetSentence.getConstTree())
+                            .collect(Collectors.toList());
+                    dtFeatures = new DTFeatures(depTrees);
+
+                    for(String depCounts : dtFeatures.getDependencyCounts(1).keySet()){
+                        if(featureVector.containsKey(depCounts)){
+                            featureVector.put(depCounts,dtFeatures.getDependencyCounts(1).get(depCounts));
+                        }
+                    }
+                    for(String rewriteRule : dtFeatures.getDepRules(1).keySet()){
+                        if(featureVector.containsKey(rewriteRule)){
+                            featureVector.put(rewriteRule,dtFeatures.getDepRules(1).get(rewriteRule));
+                        }
+                    }
+                    for(String skeleton : dtFeatures.getDepSkeletons(1).keySet()){
+                        if(featureVector.containsKey(skeleton)){
+                            featureVector.put(skeleton,dtFeatures.getDepSkeletons(1).get(skeleton));
+                        }
+                    }
+                    for(String simpleRule : dtFeatures.getDepRulesSimple(1).keySet()){
+                        if(featureVector.containsKey(simpleRule)){
+                            featureVector.put(simpleRule,dtFeatures.getDepRulesSimple(1).get(simpleRule));
+                        }
+                    }
+                }
                 label = labelMap.get(docId);
                 int featureCounter;
                 if ((counter>=(num*3400)) &&  (counter<((num+1)*3400))){
@@ -401,7 +482,7 @@ public class FeatureExtractor {
         }
     }
 
-    private static void setAllValuesToZero(HashMap<String, Integer> hm){
+    public static void setAllValuesToZero(Map<String, Integer> hm){
         for (Map.Entry<String, Integer> entry : hm.entrySet()) {
             hm.put(entry.getKey(), 0);
         }
