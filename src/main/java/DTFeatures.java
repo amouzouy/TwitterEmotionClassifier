@@ -88,6 +88,9 @@ public class DTFeatures {
     }
 
     private void parseStringTree(String treeString, String head) {
+        if(!treeString.contains("[")){
+            return;
+        }
         String subtree,depString,substring, headString;
         treeString = treeString.substring(treeString.indexOf(" ")+1,treeString.length()-1);
         depString = head;

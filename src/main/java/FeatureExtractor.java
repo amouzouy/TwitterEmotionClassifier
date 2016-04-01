@@ -25,6 +25,7 @@ public class FeatureExtractor {
 
         boolean ub=false,bb=false,posF=false,posC=false,ir=false,lemmaT=false, pt=false,dt=false,weights = false;
         int uFreqCutoff = 0, bFreqCutoff = 0, tfNorm=0, posCCutoff=0, posFCutoff=0,posCMap=0,posFMap=0;
+        String dtFeats="",ptFeats="";
         String labelsPath="", sentencesPath="", posJsonPath="";
 
         switch(System.getProperty("os.name")){
@@ -77,7 +78,7 @@ public class FeatureExtractor {
                     break;
                 case "pt":
                     pt=true;
-                    i--;
+                    ptFeats = args[i+1];
                     break;
                 case "ir":
                     ir = true;
@@ -85,7 +86,7 @@ public class FeatureExtractor {
                     break;
                 case "dt":
                     dt=true;
-                    i--;
+                    dtFeats = args[i+1];
                     break;
                 case "l":
                     lemmaT = true;
@@ -219,10 +220,18 @@ public class FeatureExtractor {
 
                     ptFeatures = new PTFeatures(trees);
 
-                    featureVector.putAll(ptFeatures.getChildCounts(0));
-                    //featureVector.putAll(ptFeatures.getRewriteRules(0));
-                    featureVector.putAll(ptFeatures.getNtPOSTags(0));
-                    featureVector.putAll(ptFeatures.getChildCountsHead(0));
+                    if(ptFeats.charAt(0) == '1') {
+                        featureVector.putAll(ptFeatures.getChildCounts(0));
+                    }
+                    if(ptFeats.charAt(1) == '1') {
+                        featureVector.putAll(ptFeatures.getNtPOSTags(0));
+                    }
+                    if(ptFeats.charAt(2) == '1'){
+                        featureVector.putAll(ptFeatures.getChildCountsHead(0));
+                    }
+                    if(ptFeats.charAt(3) == '1'){
+                        featureVector.putAll(ptFeatures.getRewriteRules(0));
+                    }
                 }
 
                 if(dt){
@@ -233,10 +242,18 @@ public class FeatureExtractor {
 
                     dtFeatures = new DTFeatures(depTrees);
 
-                    featureVector.putAll(dtFeatures.getDependencyCounts(0));
-                    featureVector.putAll(dtFeatures.getDepRules(0));
-                    featureVector.putAll(dtFeatures.getDepRulesSimple(0));
-                    featureVector.putAll(dtFeatures.getDepSkeletons(0));
+                    if(dtFeats.charAt(0) == '1'){
+                        featureVector.putAll(dtFeatures.getDependencyCounts(0));
+                    }
+                    if(dtFeats.charAt(1) == '1'){
+                        featureVector.putAll(dtFeatures.getDepSkeletons(0));
+                    }
+                    if(dtFeats.charAt(2) == '1'){
+                        featureVector.putAll(dtFeatures.getDepRulesSimple(0));
+                    }
+                    if(dtFeats.charAt(3) == '1') {
+                        featureVector.putAll(dtFeatures.getDepRules(0));
+                    }
                 }
                 counter++;
             }
@@ -404,7 +421,7 @@ public class FeatureExtractor {
                 if(dt){
                     DTFeatures dtFeatures;
                     List<String> depTrees = tweetInfo.getTweetSentenceList().stream()
-                            .map(tweetSentence -> tweetSentence.getConstTree())
+                            .map(tweetSentence -> tweetSentence.getDepTree())
                             .collect(Collectors.toList());
                     dtFeatures = new DTFeatures(depTrees);
 
